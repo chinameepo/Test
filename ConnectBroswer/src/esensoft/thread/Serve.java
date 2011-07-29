@@ -32,6 +32,14 @@ public class Serve extends Thread {
 		this.port = port;
 		this.root =root;
 	}
+	public Serve(int port)
+	{
+		this(port, "c://");
+	}
+	public Serve()
+	{
+		this(8080);
+	}
 
 	/**
 	 * 继承了Runnable接口，新建一个指定接口监听的ServerSocket对象
