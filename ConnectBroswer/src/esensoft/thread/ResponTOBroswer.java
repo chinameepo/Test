@@ -12,26 +12,36 @@ import java.net.Socket;
 
 /**
  * 浏览器应答类，新建一个socket对象和浏览器通信。首先获取浏览器发过来的报文，
- * 从请求报文中解析出url。然后将浏览器的url印射到本地磁盘文件。将文件读取， 
- * 通过文件流将所读取的文件传送到浏览器
+ * 从请求报文中解析出url。然后将浏览器的url印射到本地磁盘文件。将文件读取， 通过文件流将所读取的文件传送到浏览器
  * 
  * @version 3.3,2011-7-27
  * @author 邓超
  * @since jdk1.5
  * */
 public class ResponTOBroswer implements Runnable {
-	/* 所有和浏览器交互的IO流都是通过它来建立，文件也通过这个对象传输 */
+	/*
+	 * 这个对象必须要从Serve监听对象传过来，和浏览器交互的IO流都是通过它来建立，
+	 * 通过这个对象的输入流来获取url，通过这个对象的输出流来向浏览器返回内容。
+	 * 不可缺少，必须要有
+	 */
 	private Socket socket;
-	/* 文件url */
-	private String sourceName;
-	/* 服务器的默认根目录 */
+	/* 服务器的默认根目录，从Serve监听对象中获得 ，可以缺省*/
 	private String root;
-	/* 不知道这个文件是否存在，文件长度是0 */
-	private long fileLen = 0;
+	/* 文件的目录 */
+	private String sourceName;
+	/* url 为sourceName的文件大小 */
+	private long fileLen ;
 
 	public ResponTOBroswer(Socket response, String root) {
 		this.socket = response;
 		this.root = root;
+	}
+	
+   /**
+    *  root缺省是在C盘
+    *  */
+	public ResponTOBroswer(Socket response) {
+		this(response, "c:\\");
 	}
 
 	/**
@@ -51,13 +61,13 @@ public class ResponTOBroswer implements Runnable {
 			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			System.out.println("程序运行中，文件操作出现错误，程序终止！");
+			System.out.println("程序运行中出现错误，程序终止！");
 			return;
 		}
 	}
 
 	/**
-	 * 解析请求报文，获取url,并且将它拼装成windows下的指定目录root下的文件
+	 * 从socket中的输入流，获取请求报文，分析出url,并且将它拼装成windows目录root下的文件
 	 * 
 	 * @param BufferedReader
 	 *            socket获得的输入流，由它获取请求报文
@@ -69,10 +79,10 @@ public class ResponTOBroswer implements Runnable {
 			buffer.append(sourceName).append('\n');
 		}
 		sourceName = buffer.toString();
-		/* 截取报文中从第五个开始到“HTTP/1.1”之间的字符 */
+		/* 截取报文中从第五个开始到“HTTP/1.1”之间的所有字符 */
 		sourceName = sourceName.substring(5,
 				sourceName.lastIndexOf("HTTP/1.1") - 1);
-		/* 拼装目录，如果对方输入的页面是空的，即输入的就是服务器的地址，那么就跳至默认首页 */
+		/* 拼装目录。如果对方输入的页面是空的，即输入的就是服务器的地址，那么就跳至默认首页 */
 		if ("".equals(sourceName))
 			sourceName = root + "index.html";
 		else
@@ -83,26 +93,31 @@ public class ResponTOBroswer implements Runnable {
 	/**
 	 * 读取文件，写入浏览器,为了保证只有一个线程在读取文件，设置成同步方法
 	 * 如果组装好的url指定的文件存在，就读取文件，传到浏览器。如果不存在，就在浏览器上显示404页面
+	 * 这里可能出现的问题：一，如果多个浏览器多同一个文件有请求，如果设置成同步方法，后面的请求就会有延迟。
+	 * 虽然多个线程同时读取同一个文件不会损坏文件，但是还是不建议用。二，如果用户指定的404页面不存在，
+	 * 那么程序就会陷入死循环。
 	 * InputStream会抛出FileNotFoundException异常，is.read(buf)会抛出IOException
 	 * 
 	 * @param sourceName
 	 *            ，要读取文件的文件名
-	 * @param out 将文件写入浏览器的输出流
-	 * @throws IOException， FileNotFoundException
+	 * @param out
+	 *            将文件写入浏览器的输出流
+	 * @throws IOException
+	 *             ， FileNotFoundException
 	 * */
 	public synchronized void fileToBrowser(String sourceName, OutputStream out)
 			throws FileNotFoundException, IOException {
 		File file = new File(sourceName);
 		if (file.exists()) {
 			fileLen = file.length();
-			InputStream is = (InputStream)(new FileInputStream(file));
-			
-			/* 自定义的http应答报文的报文头，先把他发给浏览器，
-			 * 在这个后面加入要传给浏览器的内容 
-			 * */
+			InputStream is = (InputStream) (new FileInputStream(file));
+
+			/*
+			 * 自定义的http应答报文的报文头，先把他发给浏览器， 在这个后面加入要传给浏览器的内容
+			 */
 			String head = "HTTP/1.1 200 OK" + "\n"
 					+ "Date: Thu, 21 Jul 2011 01:45:42 GMT" + "\n"
-					+ "Content-Length: " + fileLen + "\n" 
+					+ "Content-Length: " + fileLen + "\n"
 					+ getContentType(sourceName) + "\n"
 					+ "Cache-Control: private" + "\n"
 					+ "Expires: Thu, 21 Jul 2011 01:45:42 GMT" + "\n"
@@ -118,12 +133,11 @@ public class ResponTOBroswer implements Runnable {
 			is.close();
 		} else {
 			System.out.println("找不到这个文件" + sourceName);
-			
-			/* 
-			 * 如果找不到指定的文件，就是资源不存在，就跳至404文件 
-			 * 注意这是递归调用，如果说这个指定的404文件不存在，就会陷入
+
+			/*
+			 * 如果找不到指定的文件，就是资源不存在，就跳至404文件 注意这是递归调用，如果说这个指定的404文件不存在，就会陷入
 			 * 死循环，不停调用，这个函数也就会一直执行，没有出口
-			 * */
+			 */
 			fileToBrowser("c:\\404.html", out);
 		}
 	}
@@ -138,21 +152,20 @@ public class ResponTOBroswer implements Runnable {
 	private String getContentType(String sourceString) {
 		// TODO 待完善
 		String returnType;
-		/*图片的返回类型*/
-		if (sourceString.endsWith(".jpg")||sourceString.endsWith(".jpeg"))
+		/* 图片的返回类型 */
+		if (sourceString.endsWith(".jpg") || sourceString.endsWith(".jpeg"))
 			returnType = "Content-Type: image/jpeg";
 		else if (sourceString.endsWith(".jpg"))
 			returnType = "Content-Type: image/gif";
 		else if (sourceString.endsWith(".png"))
 			returnType = "Content-Type: image/png";
-		/*文本文件的返回类型*/
+		/* 文本文件的返回类型 */
 		else if (sourceString.endsWith(".xml"))
 			returnType = "Content-Type: text/xml";
-		else if (sourceString.endsWith(".txt")
-				||sourceString.endsWith(".c")
-				||sourceString.endsWith(".cpp")
-				||sourceString.endsWith(".java")
-				||sourceString.endsWith(".h"))
+		else if (sourceString.endsWith(".txt") || sourceString.endsWith(".c")
+				|| sourceString.endsWith(".cpp")
+				|| sourceString.endsWith(".java")
+				|| sourceString.endsWith(".h"))
 			returnType = "Content-Type: text/plain";
 		else {
 			returnType = "Content-Type: text/html;charset=gb2312";

@@ -1,5 +1,6 @@
 package esensoft.thread;
 
+import java.io.File;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,6 +37,7 @@ public class Serve extends Thread {
 	{
 		this(port, "c://");
 	}
+	
 	public Serve()
 	{
 		this(8080);
@@ -72,7 +74,7 @@ public class Serve extends Thread {
 	
 	public static void main(String[] args) {
 		//监听8066端口，并且默认服务器根目录是c盘
-		Serve serve = new Serve(8066,"c:\\");
+		Serve serve = new Serve(8066);
 		serve.start();
 	}
 
