@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * @since jdk1.5
  * */
 public class ResponTOBroswer implements Runnable {
-	/* 
+	/*
 	 * 这个对象必须要从Serve监听对象传过来，和浏览器交互的IO流都是通过它来建立，
 	 * 通过这个对象的输入流来获取url，通过这个对象的输出流来向浏览器返回内容。 不可缺少，必须要有
 	 */
@@ -32,6 +32,7 @@ public class ResponTOBroswer implements Runnable {
 	private String root;
 	/* 文件的目录 */
 	private String sourceName;
+
 	public ResponTOBroswer(Socket response, String root) {
 		this.socket = response;
 		this.root = root;
@@ -77,7 +78,6 @@ public class ResponTOBroswer implements Runnable {
 				logger.error("文件流在关闭的时候出现错误！，不能正常关闭");
 			}
 		}
-
 	}
 
 	/**
@@ -88,40 +88,49 @@ public class ResponTOBroswer implements Runnable {
 	 * @exception IOException
 	 * */
 	public String getUrlFromStream(BufferedReader is) throws IOException {
+		Logger logger = LoggerFactory.getLogger(ResponTOBroswer.class);
 		StringBuilder builder = new StringBuilder();
 		String aline;
 		while (!"".equals(aline = is.readLine())) {
 			builder.append(aline).append('\n');
 		}
 		aline = builder.toString();
-		System.out.println(aline);
+		logger.info("请求的报文头是：{}", aline);
 		return cutUrl(aline);
 	}
-   /**
-    * 截断请求报文，在第一行抽取url。把这一段代码抽取出来，方便测试
- * @throws UnsupportedEncodingException 
-    * */
-	public  String cutUrl(String requestString) throws UnsupportedEncodingException {
-			if("".equals(requestString))
-				return "";
-			else if (requestString==null) {
-				return "";
-			}
-			else {
-				/* 截取报文中从第五个开始到“HTTP/1.1”之间的所有字符，因为请求报文第一行的格式一般都是
-				 * GET /******** HTTP/1.1 */
-				requestString = requestString.substring(5,
-						requestString.lastIndexOf("HTTP/1.1") - 1);
-				/* 如果对方输入的页面是空的，即输入的就是服务器的地址，例如http://localhost:8080,那么就跳至默认首页,否则就是查找文件 */
-				if ("".equals(requestString))
-					requestString = "index.html";
-				/*默认情况，URL在编码的时候会自动把空格转换成%20，例如http://c s s.txt，传过来就是http://c20%s20%s.txt
-				 * 所以要用编码把它转换回来，空格还是空格*/
-				requestString =URLDecoder.decode(requestString,"UTF-8");
-				Logger logger =LoggerFactory.getLogger(ResponTOBroswer.class);
-				logger.info("文件名是：{}",requestString);
-				return requestString;
-			}
+
+	/**
+	 * 截断请求报文，在第一行抽取url。把这一段代码抽取出来，方便测试
+	 * 
+	 * @throws UnsupportedEncodingException
+	 * */
+	public String cutUrl(String requestString)
+			throws UnsupportedEncodingException {
+		if ("".equals(requestString))
+			return "";
+		else if (requestString == null) {
+			return "";
+		} else {
+			/*
+			 * 截取报文中从第五个开始到“HTTP/1.1”之间的所有字符，因为请求报文第一行的格式一般都是 
+			 * GET /********* HTTP/1.1
+			 */
+			requestString = requestString.substring(5,
+					requestString.lastIndexOf("HTTP/1.1") - 1);
+			/*
+			 * 如果对方输入的页面是空的，即输入的就是服务器的地址，例如http://localhost:8080,那么就跳至默认首页,否则就是查找文件
+			 */
+			if ("".equals(requestString))
+				requestString = "index.html";
+			/*
+			 * 默认情况，URL在编码的时候会自动把空格转换成%20，例如http://c s
+			 * s.txt，传过来就是http://c20%s20%s.txt 所以要用编码把它转换回来，空格还是空格
+			 */
+			requestString = URLDecoder.decode(requestString, "UTF-8");
+			Logger logger = LoggerFactory.getLogger(ResponTOBroswer.class);
+			logger.info("文件名是：{}", requestString);
+			return requestString;
+		}
 	}
 
 	/**
@@ -139,7 +148,7 @@ public class ResponTOBroswer implements Runnable {
 	public void fileToBrowser(String sourceName, OutputStream out)
 			throws FileNotFoundException, IOException {
 		Logger logger = LoggerFactory.getLogger(ResponTOBroswer.class);
-		File file = new File(root,sourceName);
+		File file = new File(root, sourceName);
 		if (file.exists()) {
 			InputStream is = null;
 			try {
@@ -162,18 +171,18 @@ public class ResponTOBroswer implements Runnable {
 				}
 				out.flush();
 			} catch (IOException e) {
-				logger.error("程序要找的文件{}能找到，可是文件在读取和写入过程中出错！",sourceName);
+				logger.error("程序要找的文件{}能找到，可是文件在读取和写入过程中出错！", sourceName);
 			} finally {
-				/*可能无法正常关闭*/
+				/* 可能无法正常关闭 */
 				try {
 					is.close();
 				} catch (IOException e2) {
-					logger.error("{}文件读取流无法正常关闭！",sourceName);
+					logger.error("{}文件读取流无法正常关闭！", sourceName);
 					return;
 				}
 			}
 		} else {
-			logger.error("程序要找的文件{}找磁盘上找不到！将会用404页面来替代这个文件返回！",sourceName);
+			logger.error("程序要找的文件{}找磁盘上找不到！将会用404页面来替代这个文件返回！", sourceName);
 
 			/*
 			 * 如果找不到指定的文件，就是资源不存在，就跳至404文件 注意这是递归调用，如果说这个指定的404文件不存在，就会陷入
@@ -190,7 +199,7 @@ public class ResponTOBroswer implements Runnable {
 	 * @param String
 	 *            sourceString ，url的字符串
 	 */
-	public  String getContentType(String sourceString) {
+	public String getContentType(String sourceString) {
 		// TODO 待完善
 		String returnType;
 		/* 图片的返回类型 */
