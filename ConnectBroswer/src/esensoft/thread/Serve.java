@@ -29,6 +29,9 @@ public class Serve extends Thread {
 		this.port =port;
 		this.root =root;
 	}
+	/**
+	 * 不建议这么用，c 盘是系统盘，对这个扇区重复擦除写入会缩减硬盘寿命
+	 * */
 	public Serve(int port )
 	{
 		this(port,"c://");
@@ -40,7 +43,7 @@ public class Serve extends Thread {
 
 /**
 	 * 继承了Runnable接口，新建一个指定接口监听的ServerSocket对象
-	 * 然后监听到请求，新建一个ResponTOBroswer线程放入线程池
+	 * 然后监听到请求，新建一个ResponTOBroswer应答线程放入线程池
 	 * 
 	 * @exception Exception
 	 * */
@@ -49,7 +52,7 @@ public class Serve extends Thread {
 		ExecutorService execuor =null;
 		Logger logger = LoggerFactory.getLogger(Serve.class);
 		try {
-			 server = new ServerSocket(this.port);
+			
 			/**
 			 * 使用的是带缓冲区的线程池。建议用工厂方法Executors生成线程池 并且尽量使用有系统已经预设好场景的线程池：
 			 * Executors.newCachedThreadPool()（无界线程池，可以进行自动线程回收）
@@ -58,6 +61,7 @@ public class Serve extends Thread {
 			 * 首选是newCachedThreadPool
 			 * */
 			 execuor = Executors.newCachedThreadPool();
+			 server = new ServerSocket(this.port);
 			// 此处一定要while,不要用if,if只判断一次
 			while (listenning) {
 				ResponTOBroswer response = new ResponTOBroswer(server.accept(),

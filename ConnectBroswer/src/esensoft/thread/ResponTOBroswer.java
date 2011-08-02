@@ -15,6 +15,8 @@ import java.net.URLDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sun.javaws.exceptions.ExitException;
+
 /**
  * 浏览器应答类，通过获得的socket对象，利用IO流和浏览器通信。
  * 
@@ -24,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * */
 public class ResponTOBroswer implements Runnable {
 	/*
-	 * 这个对象必须要从Serve监听对象传过来，和浏览器交互的IO流都是通过它来建立，
+	 * 这个socket对象必须要从Serve监听对象传过来，和浏览器交互的IO流都是通过它来建立，
 	 * 通过这个对象的输入流来获取url，通过这个对象的输出流来向浏览器返回内容。 不可缺少，必须要有
 	 */
 	private Socket socket;
@@ -32,14 +34,15 @@ public class ResponTOBroswer implements Runnable {
 	private String root;
 	/* 文件的目录 */
 	private String sourceName;
-
+	/*如果程序出现异常，那么执行下去也没意义，所以我们就把线程终止。通过它来判断是否该终止！*/
+    private boolean isRunEnable =true;
 	public ResponTOBroswer(Socket response, String root) {
 		this.socket = response;
 		this.root = root;
 	}
 
 	/**
-	 * root缺省是在C盘
+	 * 这个是系统盘，非常反对这么用
 	 * */
 	public ResponTOBroswer(Socket response) {
 		this(response, "c:\\");
@@ -52,32 +55,38 @@ public class ResponTOBroswer implements Runnable {
 	 * @exception IOException
 	 * */
 	public void run() {
-		Logger logger = LoggerFactory.getLogger(ResponTOBroswer.class);
-		OutputStream out = null;
-		BufferedReader socketiStream = null;
-		try {
-			socketiStream = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-			sourceName = getUrlFromStream(socketiStream);
+		while(isRunEnable)
+		{
+			Logger logger = LoggerFactory.getLogger(ResponTOBroswer.class);
+			OutputStream out = null;
+			BufferedReader socketiStream = null;
 			try {
-				out = socket.getOutputStream();
-				fileToBrowser(sourceName, out);
+				socketiStream = new BufferedReader(new InputStreamReader(
+						socket.getInputStream()));
+				/*用这个方法获得的名字，有可能不是用户输入的url地址。尤其是在用户输入多个
+				 * %或者@号的时候，你就获取不到这些东西了！*/
+				sourceName = getUrlFromStream(socketiStream);
+				try {
+					out = socket.getOutputStream();
+					fileToBrowser(sourceName, out);
+				} catch (IOException e) {
+					logger.error("输出流对象新建的时候出错！程序终止！,");
+					isRunEnable =false;
+				}
 			} catch (IOException e) {
-				logger.error("输出流对象新建的时候出错！");
-				return;
-			}
-		} catch (IOException e) {
-			logger.error("程序运行中出现错误，程序终止！");
-			return;
-		} finally {
-			try {
-				out.close();
-				socketiStream.close();
-				socket.close();
-			} catch (IOException e) {
-				logger.error("文件流在关闭的时候出现错误！，不能正常关闭");
+				logger.error("程序运行中出现错误，程序终止！");
+				isRunEnable =false;
+			} finally {
+				try {
+					out.close();
+					socketiStream.close();
+					socket.close();
+				} catch (IOException e) {
+					logger.error("文件流在关闭的时候出现错误！，不能正常关闭");
+				}
 			}
 		}
+		
 	}
 
 	/**
@@ -94,6 +103,7 @@ public class ResponTOBroswer implements Runnable {
 		while (!"".equals(aline = is.readLine())) {
 			builder.append(aline).append('\n');
 		}
+		/*注意这一行，因为builder被初始化过了，所以aline 被赋值过后，肯定不等于Null*/
 		aline = builder.toString();
 		logger.info("请求的报文头是：{}", aline);
 		return cutUrl(aline);
@@ -104,8 +114,8 @@ public class ResponTOBroswer implements Runnable {
 	 * 
 	 * @throws UnsupportedEncodingException
 	 * */
-	public String cutUrl(String requestString)
-			throws UnsupportedEncodingException {
+	public String cutUrl(String requestString) {
+		Logger logger = LoggerFactory.getLogger(ResponTOBroswer.class);
 		if ("".equals(requestString))
 			return "";
 		else if (requestString == null) {
@@ -124,10 +134,15 @@ public class ResponTOBroswer implements Runnable {
 				requestString = "index.html";
 			/*
 			 * 默认情况，URL在编码的时候会自动把空格转换成%20，例如http://c s
-			 * s.txt，传过来就是http://c20%s20%s.txt 所以要用编码把它转换回来，空格还是空格
+			 * s.txt，通过浏览器传过来就是http://c20%s20%s.txt ，所以要用编码把它转换回来，输入的是空格截获的还是空格。
+			 * 这里遇到的问题是，假如有用户输入了%%%@@@@等符号的时候，这个URLDecoder.decode方法是会报错的！
 			 */
-			requestString = URLDecoder.decode(requestString, "UTF-8");
-			Logger logger = LoggerFactory.getLogger(ResponTOBroswer.class);
+			try {
+				requestString = URLDecoder.decode(requestString, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				logger.info("客户输到浏览器中的url包含了@%等符号，导致不能解析，程序终止！");
+				isRunEnable =false;
+			}
 			logger.info("文件名是：{}", requestString);
 			return requestString;
 		}
@@ -178,7 +193,7 @@ public class ResponTOBroswer implements Runnable {
 					is.close();
 				} catch (IOException e2) {
 					logger.error("{}文件读取流无法正常关闭！", sourceName);
-					return;
+					isRunEnable =false;	
 				}
 			}
 		} else {

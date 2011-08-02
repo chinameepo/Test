@@ -46,6 +46,7 @@ public class TestResponToBro extends TestCase{
 			//注意这里输入空格，使用的是“%20”，而不是“20%”！
 			assertEquals("c s s.txt",responTOBroswer.cutUrl("GET /c%20s%20s.txt HTTP/1.1"));
 			assertEquals("c s s.txt",responTOBroswer.cutUrl("GET /c+s+s.txt HTTP/1.1"));
+			//这一行有问题，这个怎么搞啊？如果要用decoder的话，这些@%号就出错了，如果不用的话，空格就出错了！
 			assertEquals("!!!@#%$@%#^#^$&^^$##@",responTOBroswer.cutUrl("GET /!!!@#%$@%#^#^$&^^$##@ HTTP/1.1"));
 			assertEquals("....................",responTOBroswer.cutUrl("GET /.................... HTTP/1.1"));
 			
@@ -55,7 +56,6 @@ public class TestResponToBro extends TestCase{
 			logger.error("IOExcptpion with socket1");
 		}
 		finally{
-			
 			try {
 				serverSocket.close();
 				socket.close();
