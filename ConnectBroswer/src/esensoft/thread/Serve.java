@@ -1,9 +1,11 @@
 package esensoft.thread;
 
-import java.io.File;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 核心的服务器线程，线程启动后之后会循环监听指定端口。 如果有请求，就新建一个ResponTOBroswer应答对象，它继承了Runnable接口。
@@ -43,8 +45,11 @@ public class Serve extends Thread {
 	 * @exception Exception
 	 * */
 	public void run() {
+		ServerSocket server =null;
+		ExecutorService execuor =null;
+		Logger logger = LoggerFactory.getLogger(Serve.class);
 		try {
-			ServerSocket server = new ServerSocket(this.port);
+			 server = new ServerSocket(this.port);
 			/**
 			 * 使用的是带缓冲区的线程池。建议用工厂方法Executors生成线程池 并且尽量使用有系统已经预设好场景的线程池：
 			 * Executors.newCachedThreadPool()（无界线程池，可以进行自动线程回收）
@@ -52,17 +57,24 @@ public class Serve extends Thread {
 			 * Executors.newSingleThreadExecutor()（单个后台线程）
 			 * 首选是newCachedThreadPool
 			 * */
-			ExecutorService execuor = Executors.newCachedThreadPool();
+			 execuor = Executors.newCachedThreadPool();
 			// 此处一定要while,不要用if,if只判断一次
 			while (listenning) {
 				ResponTOBroswer response = new ResponTOBroswer(server.accept(),
 						root);
 				execuor.execute(response);
 			}
-			server.close();
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("服务器初始化失败！");
 			return;
+		}finally{
+			try {
+				execuor.shutdown();
+				server.close();
+			} catch (Exception e2) {
+			  logger.error("服务器关闭过程出现错误！");
+			}
 		}
 	}
 	public static void main(String[] args) {

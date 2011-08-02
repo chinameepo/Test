@@ -2,7 +2,9 @@ package esensoft.thread;
 
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -22,6 +24,9 @@ import org.slf4j.LoggerFactory;
  */
 public class TestResponToBro extends TestCase{
 
+	/**
+	 * 对于字符串截断函数的测试
+	 * */
 	@Test
 	public void testCutUrl() {
 		Logger logger = LoggerFactory.getLogger(TestResponToBro.class);
@@ -32,13 +37,18 @@ public class TestResponToBro extends TestCase{
 			 socket = serverSocket.accept();
 			 ResponTOBroswer responTOBroswer =new ResponTOBroswer(socket);
 			assertEquals("",responTOBroswer.cutUrl(""));
-			//测试运行有错误
+			//截断为空的字符串，测试运行有错误
 			assertEquals("", responTOBroswer.cutUrl(null));
-			
-			assertEquals("",responTOBroswer.cutUrl("GET  HTTP/1.1"));
+			assertEquals("index.html",responTOBroswer.cutUrl("GET / HTTP/1.1"));
 			assertEquals("c s s.txt",responTOBroswer.cutUrl("GET /c s s.txt HTTP/1.1"));
 			assertEquals("aa.png", responTOBroswer.cutUrl("GET /aa.png HTTP/1.1"));
 			assertEquals("test.txt", responTOBroswer.cutUrl("GET /test.txt HTTP/1.1"));
+			//注意这里输入空格，使用的是“%20”，而不是“20%”！
+			assertEquals("c s s.txt",responTOBroswer.cutUrl("GET /c%20s%20s.txt HTTP/1.1"));
+			assertEquals("c s s.txt",responTOBroswer.cutUrl("GET /c+s+s.txt HTTP/1.1"));
+			assertEquals("!!!@#%$@%#^#^$&^^$##@",responTOBroswer.cutUrl("GET /!!!@#%$@%#^#^$&^^$##@ HTTP/1.1"));
+			assertEquals("....................",responTOBroswer.cutUrl("GET /.................... HTTP/1.1"));
+			
 		} catch (UnknownHostException e) {
 			logger.error("UnknownHostException");
 		} catch (IOException e) {
@@ -54,7 +64,34 @@ public class TestResponToBro extends TestCase{
 			}
 		}
 	}
-
+	
+	/**
+	 * 对于获取报文函数的测试
+	 * */
+	@Test
+	public void testGetUrlFromStream()
+	{
+		Logger logger = LoggerFactory.getLogger(TestResponToBro.class);
+		ServerSocket serverSocket =null;
+		Socket socket =null ;
+		try {
+			serverSocket =new ServerSocket(8066);
+			 socket = serverSocket.accept();
+			 ResponTOBroswer responTOBroswer =new ResponTOBroswer(socket);
+			 BufferedReader socketiStream = new BufferedReader(new InputStreamReader(
+						socket.getInputStream()));
+			 
+			 
+			 assertEquals("", responTOBroswer.getUrlFromStream(null));
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 对于获取MIME类型函数的测试
+	 * */
 	@Test
 	public void testGetContentType() {
 		Logger logger = LoggerFactory.getLogger(TestResponToBro.class);
@@ -72,6 +109,9 @@ public class TestResponToBro extends TestCase{
 			 assertEquals("Content-Type: text/html;charset=gb2312",responTOBroswer.getContentType("xx.tx"));
 			 assertEquals("Content-Type: text/html;charset=gb2312",responTOBroswer.getContentType("..."));
 			 assertEquals("Content-Type: text/plain",responTOBroswer.getContentType("aa.text"));
+			 assertEquals("Content-Type: image/jpeg",responTOBroswer.getContentType("xx.jpg"));
+			 assertEquals("Content-Type: image/gif",responTOBroswer.getContentType("xx.gif"));
+			 assertEquals("Content-Type: image/png",responTOBroswer.getContentType("xx.png"));
 		}  catch (UnknownHostException e) {
 			logger.error("UnknownHostException");
 		} catch (IOException e) {

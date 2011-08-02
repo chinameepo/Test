@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * @since jdk1.5
  * */
 public class ResponTOBroswer implements Runnable {
-	/*
+	/* 
 	 * 这个对象必须要从Serve监听对象传过来，和浏览器交互的IO流都是通过它来建立，
 	 * 通过这个对象的输入流来获取url，通过这个对象的输出流来向浏览器返回内容。 不可缺少，必须要有
 	 */
@@ -32,7 +32,6 @@ public class ResponTOBroswer implements Runnable {
 	private String root;
 	/* 文件的目录 */
 	private String sourceName;
-
 	public ResponTOBroswer(Socket response, String root) {
 		this.socket = response;
 		this.root = root;
@@ -103,14 +102,14 @@ public class ResponTOBroswer implements Runnable {
  * @throws UnsupportedEncodingException 
     * */
 	public  String cutUrl(String requestString) throws UnsupportedEncodingException {
-		
 			if("".equals(requestString))
 				return "";
 			else if (requestString==null) {
 				return "";
 			}
 			else {
-				/* 截取报文中从第五个开始到“HTTP/1.1”之间的所有字符 */
+				/* 截取报文中从第五个开始到“HTTP/1.1”之间的所有字符，因为请求报文第一行的格式一般都是
+				 * GET /******** HTTP/1.1 */
 				requestString = requestString.substring(5,
 						requestString.lastIndexOf("HTTP/1.1") - 1);
 				/* 如果对方输入的页面是空的，即输入的就是服务器的地址，例如http://localhost:8080,那么就跳至默认首页,否则就是查找文件 */

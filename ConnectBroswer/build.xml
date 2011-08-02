@@ -1,45 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. -->
-<project basedir="." default="JUnitAllTests" name="TestJUnit4">
-    <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="d://elipse/eclipse"/>
-    <property name="debuglevel" value="source,lines,vars"/>
-     <property name="junit.output.dir" value="junit"/>
-    <property name="target" value="1.5"/>
-    <property name="source" value="1.5"/>
-    <path id="TestJUnit4.classpath">
-        <pathelement location="bin"/>
-        <pathelement location="lib/ant-junit"/>
-    </path>  
-    
-    <target name="JUnitAllTests">
-	 	    <delete dir="${junit.output.dir}"/>
-	        <mkdir dir="${junit.output.dir}"/>
-	        <junit fork="yes" printsummary="withOutAndErr">
-	            <formatter type="xml"/>
-	        	<batchtest fork="yes" todir="${junit.output.dir}">
-	        		    <fileset dir="test">
-	        		      <include name="**/*Test*.java"/>
-	        		      <exclude name="**/AllTests.java"/>
-	        		    </fileset>
-	        		  </batchtest>
-	            <classpath refid="TestJUnit4.classpath"/>
-	          
-	        </junit>
-	 	 <antcall target="junitreport"/>
-	    </target>
+<project name="connectToBroserTest" default="report" basedir=".">
+     <!-- 设置路径的变量 -->
+	<target name="setProperties">
+		<property name="src.dir" value="src/" />
+		<property name="classes.dir" value="classes/" />
+		<property name="report.dir" value="report" />
+	</target>
 	
-    <target name="junitreport">
-        <junitreport todir="${junit.output.dir}">
-            <fileset dir="${junit.output.dir}">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="frames" todir="${junit.output.dir}"/>
-        </junitreport>
-    </target>
-    
+    <!-- 初始化路径，删除老文件，建立新的文件夹 -->
+	<target name="prepareDir" depends="setProperties">
+		<delete dir="${report.dir}" />
+		<delete dir="${classes.dir}" />
+		<mkdir dir="${report.dir}" />
+		<mkdir dir="${classes.dir}" />
+	</target>
+	
+     <!-- 编译源文件 -->
+	<target name="compile" depends="prepareDir">
+		<javac srcdir="./src" destdir="${classes.dir}" />
+	</target>
+
+    <!-- 运行测试单元的测试代码，fork是否要新建一个虚拟机 -->
+	<target name="test" depends="compile">
+		<junit printsummary="yes"  fork="yes" haltonfailure="no">
+			<formatter type="xml" />
+			<test name="esensoft.thread.TestConnectToBrowser" todir="${report.dir}" />
+			<classpath>
+				<pathelement location="${classes.dir}" />
+			</classpath>
+		</junit>
+	</target>
+     
+     <!-- 生成测试报告 ，使用html格式生成！-->
+	<target name="report" depends="test">
+		<junitreport todir="${report.dir}">
+			<fileset dir="${report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${report.dir}/html" />
+		</junitreport>
+	</target>
 </project>
