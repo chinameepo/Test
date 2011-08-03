@@ -74,10 +74,9 @@ public class Response implements Runnable {
 				}
 			}
 	}
-
 	/**
-	 * 从socket中的输入流，获取请求报文所有内容
-	 * 
+	 * 从socket中的输入流，获取请求报文所有内容，如果处理不好，就会在读取报文头的时候卡死，直到等待超时
+	 * 待完善：这个是从字符串中截取子串，那么要是该字符串长度是1-5，或者字符串中不含有"HTTP/1.1"，就出错了
 	 * @param BufferedReader
 	 *            socket获得的输入流，由它获取请求报文
 	 * @throws UnsupportedEncodingException ，在用户输入的url中，某个%号后面没有16进制数的话，会抛出此异常，不管它
@@ -88,6 +87,8 @@ public class Response implements Runnable {
 			return "";
 		else {
 			StringBuilder builder = new StringBuilder();
+			/*很多问题都是出在这里，如果说在这里卡死了，等待超时之后再去运行后面的程序就已经毫无意义了
+			 * 所以这里一定要保证不能卡死！*/
 			try {
 				int len=-1;
 				byte[] buff =new byte[1024];
@@ -105,6 +106,7 @@ public class Response implements Runnable {
 			String requestString = builder.toString();
 			logger.info("请求的报文头是：");
 			logger.info(requestString);
+			
 			if ("".equals(requestString))
 				return "";
 			else {
@@ -126,7 +128,6 @@ public class Response implements Runnable {
 				return requestString;
 			}
 		}
-		
 	}
 
 	/**
@@ -153,21 +154,8 @@ public class Response implements Runnable {
 					/*
 					 * 自定义的http应答报文的报文头，先把他发给浏览器。格一个空行后， 在这个后面加入要传给浏览器的文件内容
 					 */
-					String head = "HTTP/1.1 200 OK" + "\n"
-							+ "Date: Thu, 21 Jul 2011 01:45:42 GMT" + "\n"
-							+ "Content-Length: " + file.length() + "\n"
-							+ "Content-Type: "+getMIMEtpye(sourceName) + "\n"
-							+ "Cache-Control: private" + "\n"
-							+ "Expires: Thu, 21 Jul 2011 01:45:42 GMT" + "\n"
-							+ "Connection: Keep-Alive" + "\n" + "\n";
-					out.write(head.getBytes());
-					byte[] buf = new byte[1024];
-					int len;
-					is = (InputStream) (new FileInputStream(file));
-					while ((len = is.read(buf)) != -1) {
-						out.write(buf, 0, len);
-					}
-					out.flush();
+					sendHead(sourceName, out, file);
+					is = sendFile(out, file);
 				} catch (IOException e) {
 					/*这个异常没必要终止程序，读取写入文件错误，还是有可能把少量信息传到浏览器的*/
 					logger.error("程序要找的文件{}能找到，可是文件在读取和写入过程中出错！", sourceName);
@@ -189,34 +177,75 @@ public class Response implements Runnable {
 				fileToBrowser("404.html", out);
 			}
 		}
-		
+	}
+	/**
+	 * 发送报文头到一个ouputStrem对象，就是socket的outputStream对象
+	 * @param sourceName
+	 * @param out
+	 * @param file
+	 * @throws IOException
+	 */
+	public void sendHead(String sourceName, OutputStream out, File file)
+			throws IOException {
+		String head = "HTTP/1.1 200 OK" + "\n"
+				+ "Date: Thu, 21 Jul 2011 01:45:42 GMT" + "\n"
+				+ "Content-Length: " + file.length() + "\n"
+				+ "Content-Type: "+getMIMEtype(sourceName) + "\n"
+				+ "Cache-Control: private" + "\n"
+				+ "Expires: Thu, 21 Jul 2011 01:45:42 GMT" + "\n"
+				+ "Connection: Keep-Alive" + "\n" + "\n";
+		out.write(head.getBytes());
 	}
 
 	/**
+	 * 发送文件到一个ouputStrem对象，就是socket的outputStream对象
+	 * @param out
+	 * @param file
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public InputStream sendFile(OutputStream out, File file)
+			throws FileNotFoundException, IOException {
+		InputStream is;
+		byte[] buf = new byte[1024];
+		int len;
+		is = (InputStream) (new FileInputStream(file));
+		while ((len = is.read(buf)) != -1) {
+			out.write(buf, 0, len);
+		}
+		out.flush();
+		return is;
+	}
+	
+	/**
 	 * 根据文件名的后缀类型来确定返回类型。因为执行这段代码之前， 已经知道这个文件肯定存在，所以肯定是有后缀的
 	 * 决定报文头“Content-Type”那一行的内容， 例如如果是aa.jpg，返回就是"Content-Type: image/jpeg"
-	 * 要注意，文件名中包含了“”/\：*<>等符号都是不合法的
+	 * 要注意，文件名中包含了“”/\：*<>等符号都是不合法的。这个里面的判断比较多。
 	 * 
 	 * @param String
 	 *            sourceString ，url的字符串
 	 */
-	public String getMIMEtpye(String sourceString) {
+	public String getMIMEtype(String sourceString) {
 		// TODO 待完善
 		String returnType;
+		if(sourceString==null)
+			returnType ="";
 		/* 图片的返回类型 */
-		if (sourceString.endsWith(".jpg") || sourceString.endsWith(".jpeg"))
+		else if (sourceString.trim().endsWith(".jpg") || sourceString.trim().endsWith(".jpeg"))
 			returnType = "image/jpeg";
-		else if (sourceString.endsWith(".gif"))
+		else if (sourceString.trim().endsWith(".gif"))
 			returnType = "image/gif";
-		else if (sourceString.endsWith(".png"))
+		else if (sourceString.trim().endsWith(".png"))
 			returnType = "image/png";
 		/* 文本文件的返回类型 */
-		else if (sourceString.endsWith(".xml"))
+		else if (sourceString.trim().endsWith(".xml"))
 			returnType = "text/xml";
-		else if (sourceString.endsWith(".txt") || sourceString.endsWith(".c")
-				|| sourceString.endsWith(".cpp")
-				|| sourceString.endsWith(".java")
-				|| sourceString.endsWith(".h"))
+		else if (sourceString.trim().endsWith(".txt") 
+				|| sourceString.trim().endsWith(".c")
+				|| sourceString.trim().endsWith(".cpp")
+				|| sourceString.trim().endsWith(".java")
+				|| sourceString.trim().endsWith(".h"))
 			returnType = "text/plain";
 		else {
 			returnType = "text/html;charset=gb2312";
