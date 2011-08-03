@@ -149,24 +149,16 @@ public class Response implements Runnable {
 		else {
 			File file = new File(root, sourceName);
 			if (file.exists()&&file.isFile()) {
-				InputStream is = null;
 				try {
 					/*
 					 * 自定义的http应答报文的报文头，先把他发给浏览器。格一个空行后， 在这个后面加入要传给浏览器的文件内容
 					 */
 					sendHead(sourceName, out, file);
-					is = sendFile(out, file);
+				    sendFile(out, file);
 				} catch (IOException e) {
 					/*这个异常没必要终止程序，读取写入文件错误，还是有可能把少量信息传到浏览器的*/
 					logger.error("程序要找的文件{}能找到，可是文件在读取和写入过程中出错！", sourceName);
 					e.printStackTrace();
-				} finally {
-					/* 可能无法正常关闭 */
-					try {
-						is.close();
-					} catch (IOException e2) {
-						logger.error("{}文件读取流无法正常关闭！", sourceName);
-					}
 				}
 			} else {
 				logger.error("程序要找的文件{}找磁盘上找不到！将会用404页面来替代这个文件返回！", root+sourceName);
@@ -205,17 +197,28 @@ public class Response implements Runnable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public InputStream sendFile(OutputStream out, File file)
+	public void sendFile(OutputStream out, File file)
 			throws FileNotFoundException, IOException {
-		InputStream is;
-		byte[] buf = new byte[1024];
-		int len;
-		is = (InputStream) (new FileInputStream(file));
-		while ((len = is.read(buf)) != -1) {
-			out.write(buf, 0, len);
+		InputStream is =null;
+		try {
+			byte[] buf = new byte[1024];
+			int len;
+			is = (InputStream) (new FileInputStream(file));
+			while ((len = is.read(buf)) != -1) {
+				out.write(buf, 0, len);
+			}
+			out.flush();
+		} catch (IOException e) {
+			logger.error("文件读取中出现错误！");
+		} finally {
+			/* 可能无法正常关闭 */
+			try {
+				is.close();
+			} catch (IOException e2) {
+				logger.error("文件读取流无法正常关闭！");
+			}
 		}
-		out.flush();
-		return is;
+		
 	}
 	
 	/**

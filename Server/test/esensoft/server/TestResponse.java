@@ -131,7 +131,6 @@ public class TestResponse {
 		}
 		
 		
-		
 		try{
 			String url ="c://aa.png";
 			File file = new File(url);
@@ -156,13 +155,44 @@ public class TestResponse {
 				// TODO: handle exception
 			}
 		}
-		
-		
 	}
+	/**
+	 * 我认为即便不是文本文档，也可以用字符串来对文件的内容进行比较
+	 * 前面，待测试的方法已经验证，这个函数的out肯定是不为空的
+	 * @throws IOException 
+	 * */
 	@Test
-	public final void testSendFile()
+	public final void testSendFile() throws IOException
 	{
-		
+		Response response = new Response(null);
+		OutputStream  out=null;
+		//文本文档
+		try{
+			out  =(OutputStream)(new FileOutputStream("c://test-result.txt"));
+			File file  = new File("c://test.txt");
+			response.sendFile(out, file);
+			assertEquals(readFile("c://test.txt"), readFile("c://test-result.txt"));
+		}finally{
+			out.close();
+		}
+		//图片
+		try{
+			out  =(OutputStream)(new FileOutputStream("c://aa-result.png"));
+			File file  = new File("c://aa.png");
+			response.sendFile(out, file);
+			assertEquals(readFile("c://aa.png"), readFile("c://aa-result.png"));
+		}finally{
+			out.close();
+		}
+		//网页
+		try{
+			out  =(OutputStream)(new FileOutputStream("c://index-result.html"));
+			File file  = new File("c://index.html");
+			response.sendFile(out, file);
+			assertEquals(readFile("c://index.html"), readFile("c://index-result.html"));
+		}finally{
+			out.close();
+		}
 	}
 	/**
 	 * GetMIMEtpye()的测试方法，目前不能解决的问题是，如果用户输入url中就包含了很多“”号，或者/n/t之类的转义字符
@@ -186,11 +216,11 @@ public class TestResponse {
 		assertEquals("text/plain",response.getMIMEtype("Test.java"));
 		//在后面留一些空格
 		assertEquals("text/plain",response.getMIMEtype("Test.java                        "));
+		assertEquals("text/plain",response.getMIMEtype("inde x .h           "));
 		//在前面留一些空格
 		assertEquals("text/plain",response.getMIMEtype("                        Test.java"));
 		assertEquals("text/plain",response.getMIMEtype("cpp_h)(942334).txt"));
 		assertEquals("text/plain",response.getMIMEtype("index.h"));
-		assertEquals("text/plain",response.getMIMEtype("inde x .h           "));
 		assertEquals("text/html;charset=gb2312",response.getMIMEtype("index.html"));
 		assertEquals("text/html;charset=gb2312",response.getMIMEtype("index.htm"));
 		assertEquals("text/html;charset=gb2312",response.getMIMEtype("index. h t m l"));
