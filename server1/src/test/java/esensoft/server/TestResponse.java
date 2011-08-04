@@ -441,7 +441,7 @@ public class TestResponse {
 				e.printStackTrace();
 			}
 		}
-
+          //.jpg图片
 		try {
 			out = (OutputStream) (new FileOutputStream(
 					"./Temp/fileGeneraByTest/bb-result.jpg"));
@@ -449,6 +449,21 @@ public class TestResponse {
 			response.sendFile(out, file);
 			assertEquals(readFile("./Temp/fileForTestCase/bb.jpg"),
 					readFile("./Temp/fileGeneraByTest/bb-result.jpg"));
+		} finally {
+			try {
+				out.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		//混合类型，将图片读取，用一个一个文本文档存储。
+		try {
+			out = (OutputStream) (new FileOutputStream(
+					"./Temp/fileGeneraByTest/bb-result.txt"));
+			File file = new File("./Temp/fileForTestCase/bb.jpg");
+			response.sendFile(out, file);
+			assertEquals(readFile("./Temp/fileForTestCase/bb.jpg"),
+					readFile("./Temp/fileGeneraByTest/bb-result.txt"));
 		} finally {
 			try {
 				out.close();

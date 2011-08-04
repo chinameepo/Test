@@ -29,6 +29,7 @@ public class Servers extends Thread{
 		this.port =port;
 		this.root =root;
 	}
+	
 	/**
 	 * 不建议这么用，c 盘是系统盘，对这个扇区重复擦除写入会缩减硬盘寿命
 	 * */

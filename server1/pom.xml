@@ -4,7 +4,6 @@
 	<groupId>Server</groupId>
 	<artifactId>server1</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
 	<dependencies>
 		<!-- 添加对slf4j-api.jar的依赖 -->
 		<dependency>

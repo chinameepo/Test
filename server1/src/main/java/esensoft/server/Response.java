@@ -62,9 +62,11 @@ public class Response implements Runnable {
 					fileToBrowser(sourceName, out);
 				} catch (IOException e) {
 					logger.error("输出流对象新建的时候出错！程序终止！,");
+					return;
 				}
 			} catch (IOException e) {
 				logger.error("程序运行中出现错误，程序终止！");
+				return;
 			} finally {
 				try {
 					out.close();
@@ -72,12 +74,14 @@ public class Response implements Runnable {
 					socket.close();
 				} catch (IOException e) {
 					logger.error("文件流在关闭的时候出现错误！，不能正常关闭");
+					return;
 				}
 			}
 	}
 	/**
 	 * 从socket中的输入流，获取请求报文所有内容，如果处理不好，就会在读取报文头的时候卡死，直到等待超时
 	 * 待完善：这个是从字符串中截取子串，那么要是该字符串长度是1-5，或者字符串中不含有"HTTP/1.1"，就出错了
+	 * @return STring
 	 * @param BufferedReader
 	 *            socket获得的输入流，由它获取请求报文
 	 * @throws UnsupportedEncodingException ，在用户输入的url中，某个%号后面没有16进制数的话，会抛出此异常，不管它
@@ -102,6 +106,7 @@ public class Response implements Runnable {
 				}while(len==1024);
 			} catch (IOException e) {
 				logger.error("读取请求报文过程中出错！");
+				return "";
 			}
 			String requestString = builder.toString();
 			logger.info("请求的报文头是：");
@@ -138,7 +143,7 @@ public class Response implements Runnable {
 	 * 读取文件，写入浏览器 如果组装好的url指定的文件存在，就读取文件，传到浏览器。如果不存在，就在浏览器上显示404页面
 	 * 这里可能出现的问题：如果用户指定的404页面不存在， 那么程序就会陷入死循环。
 	 * InputStream会抛出FileNotFoundException异常，is.read(buf)会抛出IOException
-	 * 
+	 * @return STring
 	 * @param sourceName
 	 *            ，要读取文件的文件名
 	 * @param out
@@ -216,12 +221,14 @@ public class Response implements Runnable {
 			out.flush();
 		} catch (IOException e) {
 			logger.error("文件读取中出现错误！");
+			return;
 		} finally {
 			/* 可能无法正常关闭 */
 			try {
 				is.close();
 			} catch (IOException e2) {
 				logger.error("文件读取流无法正常关闭！");
+				return;
 			}
 		}
 		
@@ -231,7 +238,7 @@ public class Response implements Runnable {
 	 * 根据文件名的后缀类型来确定返回类型。因为执行这段代码之前， 已经知道这个文件肯定存在，所以肯定是有后缀的
 	 * 决定报文头“Content-Type”那一行的内容， 例如如果是aa.jpg，返回就是"Content-Type: image/jpeg"
 	 * 要注意，文件名中包含了“”/\：*<>等符号都是不合法的。这个里面的判断比较多。
-	 * 
+	 * @return String
 	 * @param String
 	 *            sourceString ，url的字符串
 	 */
