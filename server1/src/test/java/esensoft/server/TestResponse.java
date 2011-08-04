@@ -216,7 +216,7 @@ public class TestResponse {
 			// 验证报文头是否正确
 			assertEquals("HTTP/1.1 200 OK", resultFileReader.readLine());
 			assertEquals("Date: Thu, 21 Jul 2011 01:45:42 GMT", resultFileReader.readLine());
-			// 这里用404页面的长度来替代这个不存在文件的长度
+			// 这里用404页面的长度,来替代这个不存在文件的长度
 			assertEquals("Content-Length: "
 					+ (new File("./Temp/fileForTestCase/404.html")).length(),
 					resultFileReader.readLine());

@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: esensoft.server.TestResponse
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 5, Errors: 0, Skipped: 0, Time elapsed: 0.172 sec <<< FAILURE!
-esensoft.server.TestResponse.testGetUrlFromStream()  Time elapsed: 0.156 sec  <<< FAILURE!
+Tests run: 5, Failures: 5, Errors: 0, Skipped: 0, Time elapsed: 0.171 sec <<< FAILURE!
+esensoft.server.TestResponse.testGetUrlFromStream()  Time elapsed: 0.141 sec  <<< FAILURE!
 java.lang.NoClassDefFoundError: org/junit/Assert
 	at esensoft.server.TestResponse.testGetUrlFromStream(TestResponse.java:38)
 Caused by: java.lang.ClassNotFoundException: org.junit.Assert
@@ -19,11 +19,11 @@ esensoft.server.TestResponse.testFileToBrowser()  Time elapsed: 0 sec  <<< FAILU
 java.lang.NoClassDefFoundError: org/junit/Assert
 	at esensoft.server.TestResponse.testFileToBrowser(TestResponse.java:105)
 
-esensoft.server.TestResponse.testSendHead()  Time elapsed: 0 sec  <<< FAILURE!
+esensoft.server.TestResponse.testSendHead()  Time elapsed: 0.015 sec  <<< FAILURE!
 java.lang.NoClassDefFoundError: org/junit/Assert
 	at esensoft.server.TestResponse.testSendHead(TestResponse.java:307)
 
-esensoft.server.TestResponse.testSendFile()  Time elapsed: 0.016 sec  <<< FAILURE!
+esensoft.server.TestResponse.testSendFile()  Time elapsed: 0 sec  <<< FAILURE!
 java.lang.NoClassDefFoundError: org/junit/Assert
 	at esensoft.server.TestResponse.testSendFile(TestResponse.java:403)
 
