@@ -165,7 +165,7 @@ public class Response implements Runnable {
 					e.printStackTrace();
 				}
 			} else {
-				//logger.error("程序要找的文件{}找磁盘上找不到！将会用404页面来替代这个文件返回！", root+sourceName);
+				logger.error("程序要找的文件{}找磁盘上找不到！将会用404页面来替代这个文件返回！", root+sourceName);
 				/*
 				 * 如果找不到指定的文件，就是资源不存在，就跳至404文件 注意这是递归调用，如果说这个指定的404文件不存在，就会陷入
 				 * 死循环，不停调用，这个函数也就会一直执行，没有出口
@@ -262,7 +262,6 @@ public class Response implements Runnable {
 				returnType = "text/html;charset=gb2312";
 			}
 		}
-		
 		return returnType;
 	}
 }

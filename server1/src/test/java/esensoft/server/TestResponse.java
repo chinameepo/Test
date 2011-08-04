@@ -43,7 +43,7 @@ public class TestResponse {
 				response.getUrlFromStream((InputStream) (new FileInputStream(
 						"./Temp/fileForTestCase/request-png.txt"))));
 		/* 文件的第一行是GET /Temp/test HTTP/1.1，是一个目录 */
-		assertEquals("Temp/test",
+		assertEquals("temp/test",
 				response.getUrlFromStream((InputStream) (new FileInputStream(
 						"./Temp/fileForTestCase/request-dir.txt"))));
 		/* 文件的第一行是GET /c%20s%20s.txt HTTP/1.1 */
@@ -51,7 +51,7 @@ public class TestResponse {
 				response.getUrlFromStream((InputStream) (new FileInputStream(
 						"./Temp/fileForTestCase/request-decode%.txt"))));
 		/* 文件的第一行是GET /c+s+s.txt HTTP/1.1 */
-		assertEquals("Temp/c s s.txt",
+		assertEquals("temp/c s s.txt",
 				response.getUrlFromStream((InputStream) (new FileInputStream(
 						"./Temp/fileForTestCase/request-decode+.txt"))));
 		// 这行肯定错了！
@@ -65,7 +65,7 @@ public class TestResponse {
 				response.getUrlFromStream((InputStream) (new FileInputStream(
 						"./Temp/fileForTestCase/request-home.txt"))));
 		/* 文件第一行是GET /fwfi39489@#@#^&&**(()()<>?>>LLL:" HTTP/1.1 */
-		assertEquals("fwfi39489@#@#^&&**(()()<>?>>LLL:",
+		assertEquals("fwfi39489@#@#^&&**(()()<>?>>lll:",
 				response.getUrlFromStream((InputStream) (new FileInputStream(
 						"./Temp/fileForTestCase/request-complex.txt"))));
 		// 空值
@@ -303,7 +303,6 @@ public class TestResponse {
 			response.sendHead(url, out, file);
 			br = new BufferedReader(new FileReader(
 					"./Temp/fileGeneraByTest/test-head.txt"));
-
 			assertEquals("HTTP/1.1 200 OK", br.readLine());
 			assertEquals("Date: Thu, 21 Jul 2011 01:45:42 GMT", br.readLine());
 			assertEquals("Content-Length: " + file.length(), br.readLine());
@@ -503,9 +502,9 @@ public class TestResponse {
 				response.getMIMEtype("feffazff fewf fwe@#%@^#$.cpp"));
 		assertEquals("text/plain", response.getMIMEtype("Test.java"));
 		// 在后面留一些空格
-		assertEquals("text/plain",
-				response.getMIMEtype("Test.java                        "));
-		assertEquals("text/plain", response.getMIMEtype("inde x .h           "));
+		assertEquals("text/html;charset=gb2312",
+				response.getMIMEtype("test.java    "));
+		assertEquals("text/html;charset=gb2312", response.getMIMEtype("inde x .h           "));
 		// 在前面留一些空格
 		assertEquals("text/plain",
 				response.getMIMEtype("                        Test.java"));

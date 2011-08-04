@@ -52,7 +52,6 @@ public class Servers extends Thread{
 		ServerSocket server =null;
 		Logger logger = LoggerFactory.getLogger(Servers.class);
 		try {
-			
 			/**
 			 * 建议用工厂方法Executors生成线程池 并且尽量使用有系统已经预设好场景的线程池：
 			 * Executors.newCachedThreadPool()（无界线程池，可以进行自动线程回收）
