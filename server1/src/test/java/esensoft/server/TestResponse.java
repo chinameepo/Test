@@ -15,8 +15,6 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-
-
 /**
  *All right resrvered esensoft(2011)
  * @author  邓超   deng.369@gmail.com
@@ -25,6 +23,7 @@ import org.junit.Test;
  * 对response类的测试类
  */
 public class TestResponse {
+
 	/**
 	 * 从一个输入流里面截取url的方法的测试用例
 	 * @Todo 如果第一行有人输出了N多的转义字符///n\\\''''“”“等等，这些如何处理？
@@ -34,57 +33,157 @@ public class TestResponse {
 		Response response =new Response(null);
 		/*文件的第一行是GET /test.txt HTTP/1.1*/
 		assertEquals("test.txt", 
-				response.getUrlFromStream((InputStream)(new FileInputStream("c://Temp/test/request-txt.txt"))));
+				response.getUrlFromStream((InputStream)(new FileInputStream("./Temp/fileForTestCase/request-txt.txt"))));
 		/*文件的第一行是GET /aa.png HTTP/1.1*/
 		assertEquals("aa.png", 
-				response.getUrlFromStream((InputStream)(new FileInputStream("c://Temp/test/request-png.txt"))));
+				response.getUrlFromStream((InputStream)(new FileInputStream("./Temp/fileForTestCase/request-png.txt"))));
 		/*文件的第一行是GET /Temp/test HTTP/1.1，是一个目录*/
 		assertEquals("Temp/test", 
-				response.getUrlFromStream((InputStream)(new FileInputStream("c://Temp/test/request-dir.txt"))));
+				response.getUrlFromStream((InputStream)(new FileInputStream("./Temp/fileForTestCase/request-dir.txt"))));
 		/*文件的第一行是GET /c%20s%20s.txt HTTP/1.1*/
 		assertEquals("c s s.txt", 
-				response.getUrlFromStream((InputStream)(new FileInputStream("c://Temp/test/request-decode%.txt"))));
+				response.getUrlFromStream((InputStream)(new FileInputStream("./Temp/fileForTestCase/request-decode%.txt"))));
 		/*文件的第一行是GET /c+s+s.txt HTTP/1.1*/
 		assertEquals("Temp/c s s.txt", 
-				response.getUrlFromStream((InputStream)(new FileInputStream("c://Temp/test/request-decode+.txt"))));
+				response.getUrlFromStream((InputStream)(new FileInputStream("./Temp/fileForTestCase/request-decode+.txt"))));
 		//这行肯定错了！
 		/*assertEquals("c s s%%.txt", 
 				response.getUrlFromStream((InputStream)(new FileInputStream("c://Temp/test/request-%%.txt"))));*/
 		assertEquals("index.html", 
-				response.getUrlFromStream((InputStream)(new FileInputStream("c://Temp/test/request-home.txt"))));
+				response.getUrlFromStream((InputStream)(new FileInputStream("./Temp/fileForTestCase/request-home.txt"))));
 	  /*文件第一行是GET /fwfi39489@#@#^&&**(()()<>?>>LLL:" HTTP/1.1*/	
 		assertEquals("fwfi39489@#@#^&&**(()()<>?>>LLL:", 
-				response.getUrlFromStream((InputStream)(new FileInputStream("c://Temp/test/request-complex.txt"))));
+				response.getUrlFromStream((InputStream)(new FileInputStream("./Temp/fileForTestCase/request-complex.txt"))));
 		//空值
 		assertEquals("", response.getUrlFromStream(null));	
 		/*这是个空文件*/
 		assertEquals("", 
-				response.getUrlFromStream((InputStream)(new FileInputStream("c://Temp/test/request-empty.txt"))));
+				response.getUrlFromStream((InputStream)(new FileInputStream("./Temp/fileForTestCase/request-empty.txt"))));
 	}
-	/**
-	 * 确定这个被测试的方法的参数out,sourcname,file对象肯定不为空
+	/**具体的写入头文件、写入文件的，这个被测试方法的子方法已经测试过了
+	 * 这个类主要是测试：1，错误的地址是否会返回404页面。2，应答报文头是否写进了文件
+	 * @throws IOException 
 	 * */
 	@Test
-	public final void testFileToBrowser() {
+	public final void testFileToBrowser() throws IOException
+	{
 		Response response = new Response(null);
+		OutputStream out =null;
+		BufferedReader br =null;
+		BufferedReader sourceReader =null;
+		try{
+			String sourceName ="test.txt";
+			File file = new File("./Temp/fileForTestCase/",sourceName);
+			out =(OutputStream)(new FileOutputStream("./Temp/fileGeneraByTest/test-all.txt"));	
+			response.fileToBrowser(sourceName, out);
+			String sourceString,outString;
+			br =new BufferedReader(new FileReader("./Temp/fileGeneraByTest/test-all.txt"));
+			sourceReader =new BufferedReader(new FileReader("./Temp/fileForTestCase/test.txt"));
+			//验证报文头是否正确
+			assertEquals("HTTP/1.1 200 OK", br.readLine());
+			assertEquals("Date: Thu, 21 Jul 2011 01:45:42 GMT",br.readLine());
+			assertEquals("Content-Length: " + file.length(),br.readLine());
+			assertEquals("Content-Type: "+response.getMIMEtype(sourceName), br.readLine());
+			assertEquals("Cache-Control: private", br.readLine());
+			assertEquals("Expires: Thu, 21 Jul 2011 01:45:42 GMT",br.readLine());
+			assertEquals("Connection: Keep-Alive", br.readLine());
+			assertEquals("", br.readLine());
+			//验证文件内容是否正确
+			while(((sourceString=sourceReader.readLine())!=null)&&((outString=br.readLine())!=null)){
+				assertEquals(sourceString, outString);
+			}		
+		}finally{
+			try {
+				out.close();
+				br.close();
+				sourceReader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
+		try{
+			String sourceName ="test.html";
+			File file = new File("./Temp/fileForTestCase/",sourceName);
+			out =(OutputStream)(new FileOutputStream("./Temp/fileGeneraByTest/test-all.html"));	
+			response.fileToBrowser(sourceName, out);
+			String sourceString,outString;
+			br =new BufferedReader(new FileReader("./Temp/fileGeneraByTest/test-all.html"));
+			sourceReader =new BufferedReader(new FileReader("./Temp/fileForTestCase/test.html"));
+			//验证报文头是否正确
+			assertEquals("HTTP/1.1 200 OK", br.readLine());
+			assertEquals("Date: Thu, 21 Jul 2011 01:45:42 GMT",br.readLine());
+			assertEquals("Content-Length: " + file.length(),br.readLine());
+			assertEquals("Content-Type: "+response.getMIMEtype(sourceName), br.readLine());
+			assertEquals("Cache-Control: private", br.readLine());
+			assertEquals("Expires: Thu, 21 Jul 2011 01:45:42 GMT",br.readLine());
+			assertEquals("Connection: Keep-Alive", br.readLine());
+			assertEquals("", br.readLine());
+			//验证文件内容是否正确
+			while(((sourceString=sourceReader.readLine())!=null)&&((outString=br.readLine())!=null)){
+				assertEquals(sourceString, outString);
+			}		
+		}finally{
+			try {
+				out.close();
+				br.close();
+				sourceReader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		//给一个不存在的url，查看是否结果就是404页面
+		try{
+			String sourceName ="t1e2s4t.txt";
+			File file = new File("./Temp/fileForTestCase/",sourceName);
+			out =(OutputStream)(new FileOutputStream("./Temp/fileGeneraByTest/error404.html"));	
+			response.fileToBrowser(sourceName, out);
+			String sourceString,outString;
+			br =new BufferedReader(new FileReader("./Temp/fileGeneraByTest/error404.html"));
+			sourceReader =new BufferedReader(new FileReader("./Temp/fileForTestCase/404.html"));
+			//验证报文头是否正确
+			assertEquals("HTTP/1.1 200 OK", br.readLine());
+			assertEquals("Date: Thu, 21 Jul 2011 01:45:42 GMT",br.readLine());
+			//这里用404页面的长度来替代这个不存在文件的长度
+			assertEquals("Content-Length: " + (new File("./Temp/fileForTestCase/404.html")).length(),br.readLine());
+			//用404页面的类型来代替不存在文件的类型
+			assertEquals("Content-Type: "+response.getMIMEtype("./Temp/fileForTestCase/404.html"), br.readLine());
+			assertEquals("Cache-Control: private", br.readLine());
+			assertEquals("Expires: Thu, 21 Jul 2011 01:45:42 GMT",br.readLine());
+			assertEquals("Connection: Keep-Alive", br.readLine());
+			assertEquals("", br.readLine());
+			//验证文件内容是否正确
+			while(((sourceString=sourceReader.readLine())!=null)&&((outString=br.readLine())!=null)){
+				assertEquals(sourceString, outString);
+			}		
+		}finally{
+			try {
+				out.close();
+				br.close();
+				sourceReader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
+	
 	/**
-	 * 确定这个被测试的方法的参数out,对象肯定不为空.查看发送的报文头是否正确！
+	 * 确定这个被测试的方法的参数out,对象肯定不为空.url,file都是不为空的。查看发送的报文头是否正确！
 	 * @throws IOException 
 	 * */
 	@Test
 	public final void testSendHead() throws IOException
 	{
+		Response response = new Response(null);
 		OutputStream  out=null;
 		BufferedReader br =null;
-		Response response = new Response(null);
 		try{
-			String url ="c://test.txt";
+			String url ="./Temp/fileForTestCase/test.txt";
 			File file = new File(url);
-			out =(OutputStream)(new FileOutputStream("c://test-head.txt"));
+			out =(OutputStream)(new FileOutputStream("./Temp/fileGeneraByTest/test-head.txt"));
 			response.sendHead(url, out, file);
-			 br =new BufferedReader(new FileReader("c://test-head.txt")) ;
+			 br =new BufferedReader(new FileReader("./Temp/fileGeneraByTest/test-head.txt")) ;
 				
 			assertEquals("HTTP/1.1 200 OK", br.readLine());
 			assertEquals("Date: Thu, 21 Jul 2011 01:45:42 GMT",br.readLine());
@@ -105,11 +204,11 @@ public class TestResponse {
 		}
 		
 		try{
-			String url ="c://index.html";
+			String url ="./Temp/fileForTestCase/index.html";
 			File file = new File(url);
-			out =(OutputStream)(new FileOutputStream("c://html-head.txt"));
+			out =(OutputStream)(new FileOutputStream("./Temp/fileGeneraByTest/html-head.txt"));
 			response.sendHead(url, out, file);
-			 br =new BufferedReader(new FileReader("c://html-head.txt")) ;
+			 br =new BufferedReader(new FileReader("./Temp/fileGeneraByTest/html-head.txt")) ;
 				
 			assertEquals("HTTP/1.1 200 OK", br.readLine());
 			assertEquals("Date: Thu, 21 Jul 2011 01:45:42 GMT",br.readLine());
@@ -131,11 +230,11 @@ public class TestResponse {
 		
 		
 		try{
-			String url ="c://aa.png";
+			String url ="./Temp/fileForTestCase/aa.png";
 			File file = new File(url);
-			out =(OutputStream)(new FileOutputStream("c://png-head.txt"));
+			out =(OutputStream)(new FileOutputStream("./Temp/fileGeneraByTest/png-head.txt"));
 			response.sendHead(url, out, file);
-			 br =new BufferedReader(new FileReader("c://png-head.txt")) ;
+			 br =new BufferedReader(new FileReader("./Temp/fileGeneraByTest/png-head.txt")) ;
 				
 			assertEquals("HTTP/1.1 200 OK", br.readLine());
 			assertEquals("Date: Thu, 21 Jul 2011 01:45:42 GMT",br.readLine());
@@ -167,10 +266,10 @@ public class TestResponse {
 		OutputStream  out=null;
 		//文本文档
 		try{
-			out  =(OutputStream)(new FileOutputStream("c://test-result.txt"));
-			File file  = new File("c://test.txt");
+			out  =(OutputStream)(new FileOutputStream("./Temp/fileGeneraByTest/test-result.txt"));
+			File file  = new File("./Temp/fileForTestCase/test.txt");
 			response.sendFile(out, file);
-			assertEquals(readFile("c://test.txt"), readFile("c://test-result.txt"));
+			assertEquals(readFile("./Temp/fileForTestCase/test.txt"), readFile("./Temp/fileGeneraByTest/test-result.txt"));
 		}finally{
 			try {
 				out.close();
@@ -180,10 +279,10 @@ public class TestResponse {
 		}
 		//图片
 		try{
-			out  =(OutputStream)(new FileOutputStream("c://aa-result.png"));
-			File file  = new File("c://aa.png");
+			out  =(OutputStream)(new FileOutputStream("./Temp/fileGeneraByTest/aa-result.png"));
+			File file  = new File("./Temp/fileForTestCase/aa.png");
 			response.sendFile(out, file);
-			assertEquals(readFile("c://aa.png"), readFile("c://aa-result.png"));
+			assertEquals(readFile("./Temp/fileForTestCase/aa.png"), readFile("./Temp/fileGeneraByTest/aa-result.png"));
 		}finally{
 			try {
 				out.close();
@@ -193,10 +292,10 @@ public class TestResponse {
 		}
 		
 		try{
-			out  =(OutputStream)(new FileOutputStream("c://bb-result.jpg"));
-			File file  = new File("c://bb.jpg");
+			out  =(OutputStream)(new FileOutputStream("./Temp/fileGeneraByTest/bb-result.jpg"));
+			File file  = new File("./Temp/fileForTestCase/bb.jpg");
 			response.sendFile(out, file);
-			assertEquals(readFile("c://bb.jpg"), readFile("c://bb-result.jpg"));
+			assertEquals(readFile("./Temp/fileForTestCase/bb.jpg"), readFile("./Temp/fileGeneraByTest/bb-result.jpg"));
 		}finally{
 			try {
 				out.close();
@@ -206,10 +305,10 @@ public class TestResponse {
 		}
 		//网页
 		try{
-			out  =(OutputStream)(new FileOutputStream("c://index-result.html"));
-			File file  = new File("c://index.html");
+			out  =(OutputStream)(new FileOutputStream("./Temp/fileGeneraByTest/index-result.html"));
+			File file  = new File("./Temp/fileForTestCase/index.html");
 			response.sendFile(out, file);
-			assertEquals(readFile("c://index.html"), readFile("c://index-result.html"));
+			assertEquals(readFile("./Temp/fileForTestCase/index.html"), readFile("./Temp/fileGeneraByTest/index-result.html"));
 		}finally{
 			try {
 				out.close();
@@ -286,6 +385,7 @@ public class TestResponse {
 		}
 		return builder.toString();
 	}
+
 }
 
 

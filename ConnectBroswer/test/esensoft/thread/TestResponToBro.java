@@ -35,7 +35,7 @@ public class TestResponToBro extends TestCase{
 		try {
 			 serverSocket =new ServerSocket(8066);
 			 socket = serverSocket.accept();
-			 ResponTOBroswer responTOBroswer =new ResponTOBroswer(socket);
+			 Response responTOBroswer =new Response(socket);
 			assertEquals("",responTOBroswer.cutUrl(""));
 			//截断为空的字符串，测试运行有错误
 			assertEquals("", responTOBroswer.cutUrl(null));
@@ -77,7 +77,7 @@ public class TestResponToBro extends TestCase{
 		try {
 			serverSocket =new ServerSocket(8066);
 			 socket = serverSocket.accept();
-			 ResponTOBroswer responTOBroswer =new ResponTOBroswer(socket);
+			 Response responTOBroswer =new Response(socket);
 			 BufferedReader socketiStream = new BufferedReader(new InputStreamReader(
 						socket.getInputStream()));
 			 
@@ -100,7 +100,7 @@ public class TestResponToBro extends TestCase{
 		try {
 			serverSocket =new ServerSocket(8066);
 			 socket = serverSocket.accept();
-			 ResponTOBroswer responTOBroswer =new ResponTOBroswer(socket);
+			 Response responTOBroswer =new Response(socket);
 			 assertEquals("Content-Type: text/html;charset=gb2312",responTOBroswer.getContentType(""));
 			 assertEquals("Content-Type: text/html;charset=gb2312",responTOBroswer.getContentType(null));
 			 assertEquals("Content-Type: text/html;charset=gb2312",responTOBroswer.getContentType(" "));

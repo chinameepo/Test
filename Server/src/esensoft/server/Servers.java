@@ -74,7 +74,7 @@ public class Servers extends Thread{
 			try {
 				server.close();
 			} catch (Exception e2) {
-			  logger.error("服务器关闭过程出现错误！");
+			 logger.error("服务器关闭过程出现错误！");
 			}
 		}
 	}

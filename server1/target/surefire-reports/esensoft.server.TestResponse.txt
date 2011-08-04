@@ -1,0 +1,29 @@
+-------------------------------------------------------------------------------
+Test set: esensoft.server.TestResponse
+-------------------------------------------------------------------------------
+Tests run: 5, Failures: 4, Errors: 0, Skipped: 0, Time elapsed: 0.156 sec <<< FAILURE!
+esensoft.server.TestResponse.testGetUrlFromStream()  Time elapsed: 0.156 sec  <<< FAILURE!
+java.lang.NoClassDefFoundError: org/junit/Assert
+	at esensoft.server.TestResponse.testGetUrlFromStream(TestResponse.java:40)
+Caused by: java.lang.ClassNotFoundException: org.junit.Assert
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:200)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:188)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:276)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:251)
+	at java.lang.ClassLoader.loadClassInternal(ClassLoader.java:319)
+	... 19 more
+
+esensoft.server.TestResponse.testSendHead()  Time elapsed: 0 sec  <<< FAILURE!
+java.lang org/junit/Assert
+	at esensoft.server.TestResponse.testSendHead(TestResponse.java:93)
+
+esensoft.server.TestResponse.testSendFile()  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.NoClassDefFoundError: org/junit/Assert
+	at esensoft.server.TestResponse.testSendFile(TestResponse.java:177)
+
+esensoft.server.TestResponse.testGetMIMEtpye()  Time elapsed: 0 sec  <<< FAILURE!
+java.lang.NoClassDefFoundError: org/junit/Assert
+	at esensoft.server.TestResponse.testGetMIMEtpye(TestResponse.java:232)
+
