@@ -218,7 +218,7 @@ public class TestResponse {
 			assertEquals("Date: Thu, 21 Jul 2011 01:45:42 GMT", resultFileReader.readLine());
 			// 这里用404页面的长度,来替代这个不存在文件的长度
 			assertEquals("Content-Length: "
-					+ (new File("./Temp/fileForTestCase/404.html")).length(),
+					+ (new File("c://404.html")).length(),
 					resultFileReader.readLine());
 			// 用404页面的类型来代替不存在文件的类型
 			assertEquals(

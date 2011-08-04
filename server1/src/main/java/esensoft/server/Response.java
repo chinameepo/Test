@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * @author  邓超   deng.369@gmail.com
  * @version 1.0,创建时间：2011-8-2 下午07:12:36
  * @since   jdk1.5
- * 类说明
+ * 浏览器应答类，通过获得的socket对象，利用socket对象的IO流和浏览器通信。
  */
 public class Response implements Runnable {
 	/*
@@ -80,7 +80,7 @@ public class Response implements Runnable {
 	}
 	/**
 	 * 从socket中的输入流，获取请求报文所有内容，如果处理不好，就会在读取报文头的时候卡死，直到等待超时
-	 * 待完善：这个是从字符串中截取子串，那么要是该字符串长度是1-5，或者字符串中不含有"HTTP/1.1"，就出错了
+	 * @TODO 待完善：这个是从字符串中截取子串，那么要是该字符串长度是1----5，或者字符串中不含有"HTTP/1.1"，就出错了
 	 * @return STring
 	 * @param BufferedReader
 	 *            socket获得的输入流，由它获取请求报文
@@ -111,7 +111,6 @@ public class Response implements Runnable {
 			String requestString = builder.toString();
 			logger.info("请求的报文头是：");
 			logger.info(requestString);
-			
 			if ("".equals(requestString))
 				return "";
 			else {
