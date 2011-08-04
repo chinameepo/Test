@@ -111,11 +111,11 @@ public class Response implements Runnable {
 				return "";
 			else {
 				/*
-				 * 截取报文中从第五个开始到“HTTP/1.1”之间的所有字符，因为请求报文第一行的格式一般都是 
-				 * GET /urlcontent HTTP/1.1
+				 * 截取报文中从第五个开始到“HTTP/1.X”之间的所有字符，因为请求报文第一行的格式一般都是 
+				 * GET /urlcontent**** HTTP/1.1
 				 */
 				requestString = requestString.substring(5,
-						requestString.lastIndexOf("HTTP/1.1") - 1);
+						requestString.lastIndexOf("HTTP/1.") - 1);
 				/* 如果对方输入的页面是空的，即输入的就是服务器的地址，例如http://localhost:8080,那么就跳至默认首页,否则就是查找文件 */
 				if ("".equals(requestString))
 					{
@@ -172,6 +172,7 @@ public class Response implements Runnable {
 	}
 	/**
 	 * 发送报文头到一个ouputStrem对象，就是socket的outputStream对象
+	 * 这代码这么写的前提是：这三个参数都是有意义的，都不为空。
 	 * @param sourceName
 	 * @param out
 	 * @param file
@@ -191,6 +192,7 @@ public class Response implements Runnable {
 
 	/**
 	 * 发送文件到一个ouputStrem对象，就是socket的outputStream对象
+	 * 这代码这么写的前提是：这三个参数都是有意义的，都不为空。
 	 * @param out
 	 * @param file
 	 * @return
@@ -235,7 +237,8 @@ public class Response implements Runnable {
 		if(sourceString==null)
 			returnType ="";
 		/* 图片的返回类型 */
-		else if (sourceString.trim().endsWith(".jpg") || sourceString.trim().endsWith(".jpeg"))
+		else if (sourceString.trim().endsWith(".jpg")
+				|| sourceString.trim().endsWith(".jpeg"))
 			returnType = "image/jpeg";
 		else if (sourceString.trim().endsWith(".gif"))
 			returnType = "image/gif";
