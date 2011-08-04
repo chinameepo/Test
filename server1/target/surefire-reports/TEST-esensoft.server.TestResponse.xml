@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="4" time="0.156" errors="0" skipped="0" tests="5" name="esensoft.server.TestResponse">
+<testsuite failures="5" time="0.172" errors="0" skipped="0" tests="5" name="esensoft.server.TestResponse">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="D:\eclipse\jre\bin"/>
@@ -13,13 +13,13 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value="Service Pack 3"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="D:\JAVA\server1"/>
+    <property name="user.dir" value="D:\githome\githome\server1"/>
     <property name="java.runtime.version" value="1.6.0_05-b13"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
-    <property name="basedir" value="D:\JAVA\server1"/>
+    <property name="basedir" value="D:\githome\githome\server1"/>
     <property name="java.endorsed.dirs" value="D:\eclipse\jre\lib\endorsed"/>
     <property name="os.arch" value="x86"/>
-    <property name="surefire.real.class.path" value="D:\JAVA\server1\target\surefire\surefirebooter50506.jar"/>
+    <property name="surefire.real.class.path" value="D:\githome\githome\server1\target\surefire\surefirebooter8681.jar"/>
     <property name="java.io.tmpdir" value="D:\Temp\"/>
     <property name="line.separator" value="
 "/>
@@ -28,7 +28,7 @@
     <property name="os.name" value="Windows XP"/>
     <property name="sun.jnu.encoding" value="GB18030"/>
     <property name="java.library.path" value="D:\eclipse\jre\bin;.;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\system32\WBEM;F:\oracle\product\10.2.0\db_1\bin;C:\Program Files\Java\jdk1.6.0_10\bin;C:\Program Files\Java\jre6\bin;C:\Program Files\Common Files\Thunder Network\KanKan\Codecs;D:\vc6\Tools\WinNT;D:\vc6\MSDev98\Bin;D:\vc6\Tools;D:\Microsoft Visual Studio\VC98\bin"/>
-    <property name="surefire.test.class.path" value="D:\JAVA\server1\target\test-classes;D:\JAVA\server1\target\classes;C:\Documents and Settings\Administrator\.m2\repository\org\slf4j\slf4j-api\1.6.1\slf4j-api-1.6.1.jar;C:\Documents and Settings\Administrator\.m2\repository\ch\qos\logback\logback-classic\0.9.29\logback-classic-0.9.29.jar;C:\Documents and Settings\Administrator\.m2\repository\ch\qos\logback\logback-core\0.9.29\logback-core-0.9.29.jar;"/>
+    <property name="surefire.test.class.path" value="D:\githome\githome\server1\target\test-classes;D:\githome\githome\server1\target\classes;C:\Documents and Settings\Administrator\.m2\repository\org\slf4j\slf4j-api\1.6.1\slf4j-api-1.6.1.jar;C:\Documents and Settings\Administrator\.m2\repository\ch\qos\logback\logback-classic\0.9.29\logback-classic-0.9.29.jar;C:\Documents and Settings\Administrator\.m2\repository\ch\qos\logback\logback-core\0.9.29\logback-core-0.9.29.jar;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.class.version" value="50.0"/>
     <property name="sun.management.compiler" value="HotSpot Client Compiler"/>
@@ -39,7 +39,7 @@
     <property name="java.specification.version" value="1.6"/>
     <property name="file.encoding" value="GB18030"/>
     <property name="user.name" value="Administrator"/>
-    <property name="java.class.path" value="D:\JAVA\server1\target\test-classes;D:\JAVA\server1\target\classes;C:\Documents and Settings\Administrator\.m2\repository\org\slf4j\slf4j-api\1.6.1\slf4j-api-1.6.1.jar;C:\Documents and Settings\Administrator\.m2\repository\ch\qos\logback\logback-classic\0.9.29\logback-classic-0.9.29.jar;C:\Documents and Settings\Administrator\.m2\repository\ch\qos\logback\logback-core\0.9.29\logback-core-0.9.29.jar;"/>
+    <property name="java.class.path" value="D:\githome\githome\server1\target\test-classes;D:\githome\githome\server1\target\classes;C:\Documents and Settings\Administrator\.m2\repository\org\slf4j\slf4j-api\1.6.1\slf4j-api-1.6.1.jar;C:\Documents and Settings\Administrator\.m2\repository\ch\qos\logback\logback-classic\0.9.29\logback-classic-0.9.29.jar;C:\Documents and Settings\Administrator\.m2\repository\ch\qos\logback\logback-core\0.9.29\logback-core-0.9.29.jar;"/>
     <property name="java.vm.specification.version" value="1.0"/>
     <property name="sun.arch.data.model" value="32"/>
     <property name="java.home" value="D:\eclipse\jre"/>
@@ -61,7 +61,7 @@
   </properties>
   <testcase time="0.156" classname="esensoft.server.TestResponse" name="esensoft.server.TestResponse.testGetUrlFromStream">
     <failure message="org/junit/Assert" type="java.lang.NoClassDefFoundError">java.lang.NoClassDefFoundError: org/junit/Assert
-	at esensoft.server.TestResponse.testGetUrlFromStream(TestResponse.java:40)
+	at esensoft.server.TestResponse.testGetUrlFromStream(TestResponse.java:38)
 Caused by: java.lang.ClassNotFoundException: org.junit.Assert
 	at java.net.URLClassLoader$1.run(URLClassLoader.java:200)
 	at java.security.AccessController.doPrivileged(Native Method)
@@ -77,30 +77,30 @@ Caused by: java.lang.ClassNotFoundException: org.junit.Assert
 @HL T E S T S
 @HL-------------------------------------------------------
 @SLRunning esensoft.server.TestResponse
-20:31:21,796 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
-20:31:21,796 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback-test.xml] at [file:/D:/JAVA/server1/target/classes/logback-test.xml]
-20:31:21,843 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
-20:31:21,843 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - Setting ReconfigureOnChangeFilter scanning period to 1 minutes
-20:31:21,843 |-INFO in ch.qos.logback.classic.turbo.ReconfigureOnChangeFilter@1e9cb75 - Will scan for changes in [[D:\JAVA\server1\target\classes\logback-test.xml]] every 60 seconds. 
-20:31:21,843 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - Adding ReconfigureOnChangeFilter as a turbo filter
-20:31:21,859 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
-20:31:21,859 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [stdout]
-20:31:21,906 |-WARN in ch.qos.logback.core.ConsoleAppender[stdout] - This appender no longer admits a layout as a sub-component, set an encoder instead.
-20:31:21,906 |-WARN in ch.qos.logback.core.ConsoleAppender[stdout] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
-20:31:21,906 |-WARN in ch.qos.logback.core.ConsoleAppender[stdout] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
-20:31:21,906 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [java.sql.PreparedStatement] to DEBUG
-20:31:21,906 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [org.springframework.ui.freemarker] to DEBUG
-20:31:21,906 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
-20:31:21,906 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [FILE]
-20:31:21,906 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
-20:31:21,906 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [logger.log]
-20:31:21,906 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
-20:31:21,906 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [FILE] to Logger[ROOT]
-20:31:21,906 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [stdout] to Logger[ROOT]
+11:15:56,765 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+11:15:56,765 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback-test.xml] at [file:/D:/githome/githome/server1/target/classes/logback-test.xml]
+11:15:56,828 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+11:15:56,828 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - Setting ReconfigureOnChangeFilter scanning period to 1 minutes
+11:15:56,828 |-INFO in ch.qos.logback.classic.turbo.ReconfigureOnChangeFilter@1e9cb75 - Will scan for changes in [[D:\githome\githome\server1\target\classes\logback-test.xml]] every 60 seconds. 
+11:15:56,828 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - Adding ReconfigureOnChangeFilter as a turbo filter
+11:15:56,828 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+11:15:56,828 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [stdout]
+11:15:56,875 |-WARN in ch.qos.logback.core.ConsoleAppender[stdout] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+11:15:56,875 |-WARN in ch.qos.logback.core.ConsoleAppender[stdout] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+11:15:56,875 |-WARN in ch.qos.logback.core.ConsoleAppender[stdout] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+11:15:56,875 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [java.sql.PreparedStatement] to DEBUG
+11:15:56,875 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [org.springframework.ui.freemarker] to DEBUG
+11:15:56,875 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
+11:15:56,875 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [FILE]
+11:15:56,875 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+11:15:56,875 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [logger.log]
+11:15:56,875 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
+11:15:56,875 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [FILE] to Logger[ROOT]
+11:15:56,875 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [stdout] to Logger[ROOT]
 
-20:31:21.921 [main]  INFO  esensoft.server.Response -
+11:15:56.890 [main]  INFO  esensoft.server.Response -
 				请求的报文头是：
-20:31:21.921 [main]  INFO  esensoft.server.Response -
+11:15:56.890 [main]  INFO  esensoft.server.Response -
 				GET /test.txt HTTP/1.1
 Accept: */*
 ThreadID: 2044
@@ -111,24 +111,28 @@ Host: 127.0.0.1:8066
 Connection: Keep-Alive
 Cookie: __utma=96992031.961023515.1311640860.1311640860.1311732578.2; __utmz=96992031.1311640860.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
 
-20:31:21.921 [main]  INFO  esensoft.server.Response -
+11:15:56.890 [main]  INFO  esensoft.server.Response -
 				文件名是：test.txt
 </system-out>
   </testcase>
-  <testcase time="0" classname="esensoft.server.TestResponse" name="esensoft.server.TestResponse.testFileToBrowser"/>
-  <testcase time="0" classname="esensoft.server.TestResponse" name="esensoft.server.TestResponse.testSendHead">
+  <testcase time="0" classname="esensoft.server.TestResponse" name="esensoft.server.TestResponse.testFileToBrowser">
     <failure message="org/junit/Assert" type="java.lang.NoClassDefFoundError">java.lang.NoClassDefFoundError: org/junit/Assert
-	at esensoft.server.TestResponse.testSendHead(TestResponse.java:93)
+	at esensoft.server.TestResponse.testFileToBrowser(TestResponse.java:105)
 </failure>
   </testcase>
-  <testcase time="0" classname="esensoft.server.TestResponse" name="esensoft.server.TestResponse.testSendFile">
+  <testcase time="0" classname="esensoft.server.TestResponse" name="esensoft.server.TestResponse.testSendHead">
     <failure message="org/junit/Assert" type="java.lang.NoClassDefFoundError">java.lang.NoClassDefFoundError: org/junit/Assert
-	at esensoft.server.TestResponse.testSendFile(TestResponse.java:177)
+	at esensoft.server.TestResponse.testSendHead(TestResponse.java:307)
+</failure>
+  </testcase>
+  <testcase time="0.016" classname="esensoft.server.TestResponse" name="esensoft.server.TestResponse.testSendFile">
+    <failure message="org/junit/Assert" type="java.lang.NoClassDefFoundError">java.lang.NoClassDefFoundError: org/junit/Assert
+	at esensoft.server.TestResponse.testSendFile(TestResponse.java:403)
 </failure>
   </testcase>
   <testcase time="0" classname="esensoft.server.TestResponse" name="esensoft.server.TestResponse.testGetMIMEtpye">
     <failure message="org/junit/Assert" type="java.lang.NoClassDefFoundError">java.lang.NoClassDefFoundError: org/junit/Assert
-	at esensoft.server.TestResponse.testGetMIMEtpye(TestResponse.java:232)
+	at esensoft.server.TestResponse.testGetMIMEtpye(TestResponse.java:484)
 </failure>
   </testcase>
 </testsuite>

@@ -125,7 +125,11 @@ public class Response implements Runnable {
 				/*空格经过浏览器UTF-8编码处理后会变成%20传过来*/
 				requestString =URLDecoder.decode(requestString,"UTF-8");
 				logger.info("文件名是：{}", requestString);
-				return requestString;
+				/*在windows操作系统中，文件是不区分大小写的。例如ATM.TXT,atm.txt是同一个文件。
+				 * 而c://Temp/TeSt，和C：//TEMP/TEST表示的是同一个目录。java的File对象在建立对象的时候
+				 * 对于url后面的空格是忽略的，例如c://test.txt    就等于c://test.txt
+				 * 去掉前面后面的空格，变成小写的，是方便阅读和查看。*/
+				return requestString.toLowerCase().trim();
 			}
 		}
 	}
@@ -236,26 +240,29 @@ public class Response implements Runnable {
 		String returnType;
 		if(sourceString==null)
 			returnType ="";
-		/* 图片的返回类型 */
-		else if (sourceString.trim().endsWith(".jpg")
-				|| sourceString.trim().endsWith(".jpeg"))
-			returnType = "image/jpeg";
-		else if (sourceString.trim().endsWith(".gif"))
-			returnType = "image/gif";
-		else if (sourceString.trim().endsWith(".png"))
-			returnType = "image/png";
-		/* 文本文件的返回类型 */
-		else if (sourceString.trim().endsWith(".xml"))
-			returnType = "text/xml";
-		else if (sourceString.trim().endsWith(".txt") 
-				|| sourceString.trim().endsWith(".c")
-				|| sourceString.trim().endsWith(".cpp")
-				|| sourceString.trim().endsWith(".java")
-				|| sourceString.trim().endsWith(".h"))
-			returnType = "text/plain";
 		else {
-			returnType = "text/html;charset=gb2312";
+			/* 图片的返回类型 */
+			if (sourceString.endsWith(".jpg")
+					|| sourceString.endsWith(".jpeg"))
+				returnType = "image/jpeg";
+			else if (sourceString.endsWith(".gif"))
+				returnType = "image/gif";
+			else if (sourceString.endsWith(".png"))
+				returnType = "image/png";
+			/* 文本文件的返回类型 */
+			else if (sourceString.endsWith(".xml"))
+				returnType = "text/xml";
+			else if (sourceString.endsWith(".txt") 
+					|| sourceString.endsWith(".c")
+					|| sourceString.endsWith(".cpp")
+					|| sourceString.endsWith(".java")
+					|| sourceString.endsWith(".h"))
+				returnType = "text/plain";
+			else {
+				returnType = "text/html;charset=gb2312";
+			}
 		}
+		
 		return returnType;
 	}
 }
