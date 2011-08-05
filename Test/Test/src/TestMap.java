@@ -75,6 +75,7 @@ public class TestMap {
 		testMap.initMap("src/mimeMap", testMap.map);
 		testMap.orderMap(testMap.map);
 		System.out.println("给一个空值，看看map会输出什么null："+testMap.map.get("dengchao"));
+		System.out.println("给一个空值，看看map会输出什么null："+testMap.map.get(null));
 	}
 
 }
