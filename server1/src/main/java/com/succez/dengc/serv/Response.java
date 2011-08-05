@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.Inet4Address;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ import org.slf4j.LoggerFactory;
 public class Response implements Runnable {
 	/*
 	 * 这个socket对象必须要从Serve监听对象传过来，和浏览器交互的IO流都是通过它来建立，
-	 * 通过这个对象的输入流来获取url，通过这个对象的输出流来向浏览器返回内容。 不可缺少，必须要有
+	 * 通过对象的输入流来获取url，通过对象的输出流来向浏览器返回内容。 不可缺少
 	 */
 	private Socket socket;
 	/* 服务器的默认根目录，从Serve监听对象中获得 ，可以缺省 */
@@ -40,7 +41,7 @@ public class Response implements Runnable {
 		this.root = root;
 	} 
 	/**
-	 * 这个是系统盘，最好不要将根目录放在这里
+	 * 这个是系统盘，最好不要将根目录设在这里
 	 * */
 	public Response(Socket response) {
 		this(response, "c:\\");
@@ -56,17 +57,16 @@ public class Response implements Runnable {
 			InputStream socketiStream = null;
 			try {
 				socketiStream = socket.getInputStream();
-				String sourceName;
-				sourceName = root+getUrlFromStream(socketiStream);
+				String sourceName = root+getUrlFromStream(socketiStream);
 				try {
 					out = socket.getOutputStream();
 					fileToBrowser(sourceName, out);
 				} catch (IOException e) {
-					logger.error("输出流对象新建的时候出错！程序终止！,");
+					logger.error("浏览器输出流对象新建的时候出错！程序终止！来自方法：【run】");
 					return;
 				}
 			} catch (IOException e) {
-				logger.error("程序运行中出现错误，程序终止！");
+				logger.error("程序运行中出现错误，程序终止！来自方法：【run】");
 				return;
 			} finally {
 				try {
@@ -74,7 +74,7 @@ public class Response implements Runnable {
 					socketiStream.close();
 					socket.close();
 				} catch (IOException e) {
-					logger.error("文件流在关闭的时候出现错误！，不能正常关闭");
+					logger.error("文件流在关闭的时候出现错误！，不能正常关闭来。自方法：【run】");
 					return;
 				}
 			}
@@ -103,7 +103,7 @@ public class Response implements Runnable {
 			return url;
 		}
 		/*空格经过浏览器UTF-8编码处理后会变成%20传过来,要进行解码还原*/
-		requestString =URLDecoder.decode(url,"UTF-8");
+		url =URLDecoder.decode(url,"UTF-8");
 		logger.info("文件名是：{}", url);
 		return url;
 		}
@@ -127,7 +127,7 @@ public class Response implements Runnable {
 				}
 			}while(len==1024);
 		} catch (IOException e) {
-			logger.error("读取请求报文过程中出错！");
+			logger.error("读取请求报文过程中出错！来自方法：【 getHttpHead】");
 			return "";
 		}
 		logger.info("请求的报文头是：");
@@ -151,14 +151,14 @@ public class Response implements Runnable {
 		if (file.exists()&&file.isFile()) {
 			try {
 				sendHead(sourceName, out);
-			    sendFile(out, file);
+			    sendFile(file,out);
 			} catch (IOException e) {
 				/*这个异常没必要终止程序，读取写入文件错误，还是有可能把少量信息传到浏览器的*/
-				logger.error("程序要找的文件{}能找到，可是文件在读取和写入过程中出错！", sourceName);
+				logger.error("程序要找的文件【{}】能找到，可是文件在读取或者写入浏览器过程中出错！来自方法：【fileToBrowser】", sourceName);
 				e.printStackTrace();
 			}
 		} else {
-			logger.error("程序要找的文件{}找磁盘上找不到！将会用404页面来替代这个文件返回！", root+sourceName);
+			logger.error("程序要找的文件【{}】找磁盘上找不到！将会用404页面来替代这个文件返回！来自方法：【fileToBrowser】", root+sourceName);
              /* 注意这是递归调用，如果说这个指定的404文件不存在，就会陷入死循环*/
 			fileToBrowser(root+"404.html", out);
 		}
@@ -166,7 +166,7 @@ public class Response implements Runnable {
 	
 	/**
 	 * 发送报文头到一个ouputStrem对象，就是socket的outputStream对象
-	 * 这代码这么写的前提是：这三个参数都是有意义的，都不为空。
+	 * 这代码这么写的前提是：参数都是有意义的，都不为空。
 	 * @param sourceName
 	 * @param out
 	 * @param file
@@ -193,7 +193,7 @@ public class Response implements Runnable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void sendFile(OutputStream out, File file) {
+	public void sendFile( File file,OutputStream out) {
 		InputStream is =null;
 		try {
 			byte[] buf = new byte[1024];
@@ -204,14 +204,14 @@ public class Response implements Runnable {
 			}
 			out.flush();
 		} catch (IOException e) {
-			logger.error("文件【{}】读取、写入浏览器中出现错误！",file.toString());
+			logger.error("文件【{}】读取、写入浏览器中出现错误！来自方法:【sendFile】",file.toString());
 			return;
 		} finally {
 			/* 可能无法正常关闭 */
 			try {
 				is.close();
 			} catch (IOException e2) {
-				logger.error("文件读取流无法正常关闭！");
+				logger.error("文件读取流无法正常关闭！来自方法:【sendFile】");
 				return;
 			}
 		}
@@ -228,7 +228,12 @@ public class Response implements Runnable {
 	public String getMIMEtype(String sourceString) {
 		if(sourceString==null)
 			return "text/html;charset=gb2312";
-		String type=sourceString.substring(sourceString.lastIndexOf('.'));
+		else if("".equals(sourceString))
+			return "text/html;charset=gb2312";
+		int indexOfDot =sourceString.lastIndexOf('.');
+		if(indexOfDot==-1)
+			return "text/html;charset=gb2312";
+		String type=sourceString.substring(indexOfDot);
 		Map<String, String> map= new HashMap<String, String>();
 		initMap("src/main/java/com/succez/dengc/serv/mimeMap",map);
 		String returnType =map.get(type);
@@ -238,7 +243,7 @@ public class Response implements Runnable {
 	}
 	/**
 	 *对map对象进行初始化，把一个文件里面的hash关系读取，放入map中
-	 *@param String sourcFile map关系保存的文件所在
+	 *@param String sourcFile map关系保存的文件所在     ' '  '.'  "_" '_' '-'
      *@param Map<String,String> map存放读取出来的关系印射
 	 * */
 	public void initMap(String sourcFile,Map<String,String> map)
@@ -252,13 +257,13 @@ public class Response implements Runnable {
 				do {
 				   aline =in.readLine();
 				   if(aline!=null)
-				   {
-				   mapString =aline.split("=");
-				   map.put(mapString[0].trim(), mapString[1].trim());
+				   { 
+					   mapString =aline.split("==",2);
+					   map.put(mapString[0].trim(), mapString[1].trim());
 				   }
 				   } while (aline!=null);	
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("在读取map的印射关系的时候出错，文件名是{}.来自【initMap】",sourcFile);
 			}	                           	
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -271,7 +276,6 @@ public class Response implements Runnable {
 			}
 		}
 	}
-	
 }
 
 

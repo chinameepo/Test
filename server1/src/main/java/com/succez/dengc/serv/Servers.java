@@ -60,13 +60,13 @@ public class Servers extends Thread{
 				execuor.execute(response);
 			}
 		} catch (Exception e) {
-			logger.error("服务器初始化失败！");
+			logger.error("服务器初始化失败！来自方法:【 run()】");
 			return;
 		}finally{
 			try {
 				server.close();
 			} catch (Exception e2) {
-			 logger.error("服务器关闭过程出现错误！");
+			 logger.error("服务器关闭过程出现错误！来自方法:【 run()】");
 			}
 		}
 	}
