@@ -15,6 +15,8 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
+import com.succez.dengc.serv.Response;
+
 /**
  * All right resrvered esensoft(2011)
  * 
@@ -37,7 +39,7 @@ public class TestResponse {
 		/* 文件的第一行是GET /test.txt HTTP/1.1 */
 		assertEquals("test.txt",
 				response.getUrlFromStream((InputStream) (new FileInputStream(
-						"./Temp/fileForTestCase/request-txt.txt"))));
+						"./src/test/java/Temp/fileForTestCase/request-txt.txt"))));
 		/* 文件的第一行是GET /aa.png HTTP/1.1 */
 		assertEquals("aa.png",
 				response.getUrlFromStream((InputStream) (new FileInputStream(
@@ -328,7 +330,7 @@ public class TestResponse {
 			File file = new File(url);
 			out = (OutputStream) (new FileOutputStream(
 					"./Temp/fileGeneraByTest/html-head.txt"));
-			response.sendHead(url, out, file);
+			response.sendHead(url, out);
 			br = new BufferedReader(new FileReader(
 					"./Temp/fileGeneraByTest/html-head.txt"));
 

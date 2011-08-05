@@ -19,7 +19,7 @@
     <property name="basedir" value="D:\githome\githome\server1"/>
     <property name="java.endorsed.dirs" value="D:\eclipse\jre\lib\endorsed"/>
     <property name="os.arch" value="x86"/>
-    <property name="surefire.real.class.path" value="D:\githome\githome\server1\target\surefire\surefirebooter32707.jar"/>
+    <property name="surefire.real.class.path" value="D:\githome\githome\server1\target\surefire\surefirebooter47290.jar"/>
     <property name="java.io.tmpdir" value="D:\Temp\"/>
     <property name="line.separator" value="
 "/>
@@ -59,12 +59,12 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="pentium_pro+mmx pentium_pro pentium+mmx pentium i486 i386 i86"/>
   </properties>
-  <testcase time="0.156" classname="esensoft.server.TestResponse" name="testGetUrlFromStream"/>
-  <testcase time="0.032" classname="esensoft.server.TestResponse" name="testFileToBrowser">
-    <failure message="expected:&lt;Content-Length: [542]&gt; but was:&lt;Content-Length: [464]&gt;" type="org.junit.ComparisonFailure">org.junit.ComparisonFailure: expected:&lt;Content-Length: [542]&gt; but was:&lt;Content-Length: [464]&gt;
+  <testcase time="0.157" classname="esensoft.server.TestResponse" name="testGetUrlFromStream"/>
+  <testcase time="0.015" classname="esensoft.server.TestResponse" name="testFileToBrowser">
+    <failure message="expected:&lt;...&quot;6&quot; color=&quot;#443322&quot;&gt;[锟斤拷锟揭碉拷锟侥硷拷锟斤拷锟斤拷锟节ｏ拷]&lt;/font&gt;&gt; but was:&lt;...&quot;6&quot; color=&quot;#443322&quot;&gt;[您找的文件不存在！]&lt;/font&gt;&gt;" type="org.junit.ComparisonFailure">org.junit.ComparisonFailure: expected:&lt;...&quot;6&quot; color=&quot;#443322&quot;&gt;[锟斤拷锟揭碉拷锟侥硷拷锟斤拷锟斤拷锟节ｏ拷]&lt;/font&gt;&gt; but was:&lt;...&quot;6&quot; color=&quot;#443322&quot;&gt;[您找的文件不存在！]&lt;/font&gt;&gt;
 	at org.junit.Assert.assertEquals(Assert.java:123)
 	at org.junit.Assert.assertEquals(Assert.java:145)
-	at esensoft.server.TestResponse.testFileToBrowser(TestResponse.java:220)
+	at esensoft.server.TestResponse.testFileToBrowser(TestResponse.java:237)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
@@ -95,11 +95,11 @@
 	at org.apache.maven.surefire.booter.SurefireStarter.runSuitesInProcess(SurefireStarter.java:87)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:69)
 </failure>
-    <system-out>16:04:52.187 [main]  ERROR esensoft.server.Response -
+    <system-out>18:01:10.640 [main]  ERROR esensoft.server.Response -
 				程序要找的文件c:\t1e2s4t.txt找磁盘上找不到！将会用404页面来替代这个文件返回！
 </system-out>
   </testcase>
   <testcase time="0" classname="esensoft.server.TestResponse" name="testSendHead"/>
-  <testcase time="0.031" classname="esensoft.server.TestResponse" name="testSendFile"/>
+  <testcase time="0.047" classname="esensoft.server.TestResponse" name="testSendFile"/>
   <testcase time="0" classname="esensoft.server.TestResponse" name="testGetMIMEtpye"/>
 </testsuite>

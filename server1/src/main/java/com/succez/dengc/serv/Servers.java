@@ -1,4 +1,4 @@
-package esensoft.server;
+package com.succez.dengc.serv;
 
 
 import java.net.ServerSocket;
@@ -52,19 +52,11 @@ public class Servers extends Thread{
 		ServerSocket server =null;
 		Logger logger = LoggerFactory.getLogger(Servers.class);
 		try {
-			/**
-			 * 建议用工厂方法Executors生成线程池 并且尽量使用有系统已经预设好场景的线程池：
-			 * Executors.newCachedThreadPool()（无界线程池，可以进行自动线程回收）
-			 * Executors.newFixedThreadPool(int)（固定大小线程池）
-			 * Executors.newSingleThreadExecutor()（单个后台线程）
-			 * 首选是newCachedThreadPool
-			 * */
 			ExecutorService  execuor = Executors.newCachedThreadPool();
 			 server = new ServerSocket(this.port);
 			/* 此处一定要while,不要用if,if只判断一次。*/
 			while (listenning) {
-				Response response = new Response(server.accept(),
-						root);
+				Response response = new Response(server.accept(),root);
 				execuor.execute(response);
 			}
 		} catch (Exception e) {

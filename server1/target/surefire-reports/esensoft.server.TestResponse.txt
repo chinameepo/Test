@@ -2,11 +2,11 @@
 Test set: esensoft.server.TestResponse
 -------------------------------------------------------------------------------
 Tests run: 5, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 0.25 sec <<< FAILURE!
-testFileToBrowser(esensoft.server.TestResponse)  Time elapsed: 0.032 sec  <<< FAILURE!
-org.junit.ComparisonFailure: expected:<Content-Length: [542]> but was:<Content-Length: [464]>
+testFileToBrowser(esensoft.server.TestResponse)  Time elapsed: 0.015 sec  <<< FAILURE!
+org.junit.ComparisonFailure: expected:<..."6" color="#443322">[ï¿½ï¿½ï¿½Òµï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú£ï¿½]</font>> but was:<..."6" color="#443322">[ÄúÕÒµÄÎÄ¼þ²»´æÔÚ£¡]</font>>
 	at org.junit.Assert.assertEquals(Assert.java:123)
 	at org.junit.Assert.assertEquals(Assert.java:145)
-	at esensoft.server.TestResponse.testFileToBrowser(TestResponse.java:220)
+	at esensoft.server.TestResponse.testFileToBrowser(TestResponse.java:237)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)

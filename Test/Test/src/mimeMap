@@ -1,0 +1,17 @@
+.html = text/html;chaset=gb2312
+.htm =  text/html;charset=gb2312
+.txt =  text/plain
+.c =  text/plain
+.c++ = text/plain
+.pl =  text/plain
+.cc =  text/plain
+.h  =  text/plain
+.css =  text/css
+.gif =  image/gif
+.png = image/x-png
+.jpeg =  image/jpeg
+.jpg = image/jpeg
+.jpe = image/jpeg
+.tiff = image/tiff
+.tif = image/tiff
+.rgb = image/rgb
