@@ -28,52 +28,6 @@ import com.succez.dengc.serv.Response;;
  * 对response类的测试类，请注意。如果你要用自己的文件拖进来做测试，请做好备份。
  */
 public class TestResponse {
-
-	/**
-	 * 从一个输入流里面截取url的方法的测试用例
-	 * 
-	 * @TODO 如果第一行有人输出了N多的转义字符///n\\\''''“”“等等，这些如何处理？
-	 * */
-	@Test
-	public final void testGetUrlFromStream() throws FileNotFoundException,
-			UnsupportedEncodingException {
-		Response response = new Response(null);
-		
-		/* 文件的第一行是GET /test.txt HTTP/1.1 */
-		InputStream stream1= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-txt.txt"));
-		assertEquals("test.txt",response.getUrlFromStream(stream1));
-		closeInput(stream1);
-		/* 文件的第一行是GET /aa.png HTTP/1.1 */
-		InputStream stream2= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-png.txt"));
-		assertEquals("aa.png",response.getUrlFromStream(stream2));
-		closeInput(stream2);
-		/* 文件的第一行是GET /Temp/test HTTP/1.1，是一个目录 */
-		InputStream stream3= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-dir.txt"));
-		assertEquals("Temp/test",response.getUrlFromStream(stream3));
-		closeInput(stream3);
-		/* 文件的第一行是GET /c%20s%20s.txt HTTP/1.1 */
-		InputStream stream4= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-dec%.txt"));
-		assertEquals("c s s.txt",response.getUrlFromStream(stream4));
-		closeInput(stream4);
-		/* 文件的第一行是GET /Temp/c+s+s.txt HTTP/1.1 */
-		InputStream stream5= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-dec+.txt"));
-		assertEquals("Temp/c s s.txt",response.getUrlFromStream(stream5));
-		closeInput(stream5);
-		/* 文件的第一行是GET / HTTP/1.1 */
-		InputStream stream6= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-home.txt"));
-		assertEquals("index.html",response.getUrlFromStream(stream6));
-		closeInput(stream6);
-		/* 文件第一行是GET /fw48*()()?>LL: HTTP/1.1 */
-		InputStream stream7= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-cmplx.txt"));
-		assertEquals("fw48*()()?>LL:",response.getUrlFromStream(stream7));
-		closeInput(stream7);
-		/* 这是个空文件，里面没有内容 */
-		InputStream stream8= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-empt.txt"));
-		assertEquals("",response.getUrlFromStream(stream8));
-		closeInput(stream8);
-		// 空值
-		assertEquals("", response.getUrlFromStream(null));
-	}
 	/**
 	 * 关闭输入流，为了测试getUrlFromStream(InputStream )写的辅助函数
 	 * */
