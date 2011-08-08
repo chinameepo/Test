@@ -47,6 +47,7 @@ public class Response implements Runnable {
 	public Response(Socket response) {
 		this(response, "c:\\");
 	}
+	
 	/**
 	 * 核心方法，规定该线程的执行内容，通过浏览器的输入流得到请求报文头，从中截取文件Url,
 	 * 如果文件存在，读取文件，将内容传输到浏览器。不存在，返回404文件

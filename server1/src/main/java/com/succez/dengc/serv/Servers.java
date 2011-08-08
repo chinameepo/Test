@@ -62,7 +62,7 @@ public class Servers extends Thread{
 			logger.error("服务器初始化失败！来自方法:【Server.run()】");
 			return;
 		}finally{
-			if(listenning)
+			if(!listenning)
 			{
 				try {
 					server.close();
