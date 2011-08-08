@@ -26,12 +26,14 @@ import org.slf4j.LoggerFactory;
  * 浏览器应答类，通过获得的socket对象，利用socket对象的IO流和浏览器通信。
  */
 public class Response implements Runnable {
-	/*
+	/**
 	 * 这个socket对象必须要从Serve监听对象传过来，和浏览器交互的IO流都是通过它来建立，
 	 * 通过对象的输入流来获取url，通过对象的输出流来向浏览器返回内容。 不可缺少
 	 */
 	private Socket socket;
-	/* 服务器的默认根目录，从Serve对象中获得 ，可以缺省 */
+	/**
+	 *  服务器的默认根目录，从Serve对象中获得 ，可以缺省
+	 * */
 	private String root;
     private Logger logger = LoggerFactory.getLogger(Response.class);
    
@@ -196,7 +198,6 @@ public class Response implements Runnable {
 			logger.error("文件【{}】读取、写入浏览器中出现错误！来自方法:【sendFile】",file.toString());
 			return;
 		} finally {
-			/* 可能无法正常关闭 */
 			try {
 				is.close();
 			} catch (IOException e2) {
@@ -215,10 +216,10 @@ public class Response implements Runnable {
 	 *            
 	 */
 	public String getMIMEtype(String sourceString) {
-		if(sourceString==null)
+		if(sourceString==null||"".equals(sourceString))
 			return "text/html;charset=gb2312";
-		else if("".equals(sourceString))
-			return "text/html;charset=gb2312";
+		/*先把句号的位置取出来，是为了防止sourceString中没有“.”号，返回-1，
+		 * 从而造成substring值溢出的情况发生。*/
 		int indexOfDot =sourceString.lastIndexOf('.');
 		if(indexOfDot==-1)
 			return "text/html;charset=gb2312";
@@ -246,22 +247,28 @@ public class Response implements Runnable {
 				do {
 				   aline =in.readLine();
 				   if(aline!=null)
-				   { 
+				   {  
+					   /*String.splite函数第二个参数是规定按照表达式分割n-1次，所以这里是按照==号分割一次
+					    * 当然也有可能管理员疏忽，没用加上==号，那么印射值就返回null，接着mime就
+					    * 返回text/html类型*/
 					   mapString =aline.split("==",2);
 					   map.put(mapString[0].trim(), mapString[1].trim());
 				   }
 				   } while (aline!=null);	
 			} catch (IOException e) {
 				logger.error("在读取map的印射关系的时候出错，文件名是{}.来自【initMap】",sourcFile);
+				return;
 			}	                           	
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("map的印射关系文件名{}找不到，请检查您的路径是否正确。来自【initMap】",sourcFile);
+			return;
 		}finally
 		{
 			try {
 				in.close();
 			} catch (Exception e2) {
-				e2.printStackTrace();
+				logger.error("在关闭map的印射关系的文件出错，文件名是{}.来自【initMap】",sourcFile);
+				return;
 			}
 		}
 	}
