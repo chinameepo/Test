@@ -5,13 +5,11 @@ import static org.junit.Assert.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,64 +26,6 @@ import com.succez.dengc.serv.Response;;
  * 对response类的测试类，请注意。如果你要用自己的文件拖进来做测试，请做好备份。
  */
 public class TestResponse {
-
-	/**
-	 * 从一个输入流里面截取url的方法的测试用例
-	 * 
-	 * @TODO 如果第一行有人输出了N多的转义字符///n\\\''''“”“等等，这些如何处理？
-	 * */
-	@Test
-	public final void testGetUrlFromStream() throws FileNotFoundException,
-			UnsupportedEncodingException {
-		Response response = new Response(null);
-		
-		/* 文件的第一行是GET /test.txt HTTP/1.1 */
-		InputStream stream1= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-txt.txt"));
-		assertEquals("test.txt",response.getUrlFromStream(stream1));
-		closeInput(stream1);
-		/* 文件的第一行是GET /aa.png HTTP/1.1 */
-		InputStream stream2= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-png.txt"));
-		assertEquals("aa.png",response.getUrlFromStream(stream2));
-		closeInput(stream2);
-		/* 文件的第一行是GET /Temp/test HTTP/1.1，是一个目录 */
-		InputStream stream3= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-dir.txt"));
-		assertEquals("Temp/test",response.getUrlFromStream(stream3));
-		closeInput(stream3);
-		/* 文件的第一行是GET /c%20s%20s.txt HTTP/1.1 */
-		InputStream stream4= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-dec%.txt"));
-		assertEquals("c s s.txt",response.getUrlFromStream(stream4));
-		closeInput(stream4);
-		/* 文件的第一行是GET /Temp/c+s+s.txt HTTP/1.1 */
-		InputStream stream5= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-dec+.txt"));
-		assertEquals("Temp/c s s.txt",response.getUrlFromStream(stream5));
-		closeInput(stream5);
-		/* 文件的第一行是GET / HTTP/1.1 */
-		InputStream stream6= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-home.txt"));
-		assertEquals("index.html",response.getUrlFromStream(stream6));
-		closeInput(stream6);
-		/* 文件第一行是GET /fw48*()()?>LL: HTTP/1.1 */
-		InputStream stream7= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-cmplx.txt"));
-		assertEquals("fw48*()()?>LL:",response.getUrlFromStream(stream7));
-		closeInput(stream7);
-		/* 这是个空文件，里面没有内容 */
-		InputStream stream8= (InputStream)(new FileInputStream("src/test/java/testfl/reqst-empt.txt"));
-		assertEquals("",response.getUrlFromStream(stream8));
-		closeInput(stream8);
-		// 空值
-		assertEquals("", response.getUrlFromStream(null));
-	}
-	/**
-	 * 关闭输入流，为了测试getUrlFromStream(InputStream )写的辅助函数
-	 * */
-	public void closeInput(InputStream input)
-	{
-		try {
-			input.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * 具体的写入头文件、写入文件的，这个被测试方法的子方法已经测试过了
 	 * 这个类主要是测试：1，错误的地址是否会返回404页面。2，应答报文头是否写进了文件
@@ -95,32 +35,17 @@ public class TestResponse {
 	 * */
 	@Test
 	public final void testFileToBrowser() throws IOException {
-		subTest("src/test/java/testfl/test.txt","src/test/java/generfl/test-all.txt");
-		subTest("src/test/java/testfl/test.html", "src/test/java/generfl/test-all.html");
-		subTest("src/test/java/testfl/aa.png", "src/test/java/generfl/aa-all.png");
-		subTest("src/test/java/testfl/bb.jpg", "src/test/java/generfl/bb-all.jpg");
+		testFileToBroSub("src/test/java/testfl/test.txt","src/test/java/generfl/test-all.txt");
+		testFileToBroSub("src/test/java/testfl/test.html", "src/test/java/generfl/test-all.html");
+		testFileToBroSub("src/test/java/testfl/aa.png", "src/test/java/generfl/aa-all.png");
+		testFileToBroSub("src/test/java/testfl/bb.jpg", "src/test/java/generfl/bb-all.jpg");
 		/*测试输入错误url被替换为404页面，有点难度，不过还是可以实现的。
 		 *下面我先给个错误地址，不出意外，err.html就是c://4041.html加上报文头*/
-		subTest("fewfweij.fwe", "src/test/java/generfl/err.html");
+		testFileToBroSub("fewfweij.fwe", "src/test/java/generfl/err.html");
 		/*然后我让404页面也写入另外的文件*/
-		subTest("c://404.html", "src/test/java/generfl/404-all.html");
+		testFileToBroSub("c://404.html", "src/test/java/generfl/404-all.html");
 		/*接着对比两个写入的结果*/
 		assertEquals(readFile("src/test/java/generfl/err.html"), readFile("src/test/java/generfl/404-all.html"));
-	}
-	/**
-	 * 为了测试FileToBrowser(String source,OutputStream out)写的辅助测试方法
-	 * 验证从一个文件写入另一个文件的内容是否正确
-	 * @param resultReader
-	 * @param sourceReader
-	 * @throws IOException
-	 */
-	public void checkConten(BufferedReader resultReader,BufferedReader sourceReader)
-			 throws IOException {
-		String sourceString ,outString;
-		while (((sourceString = sourceReader.readLine()) != null)
-				&&((outString = resultReader.readLine()) != null)) {
-			assertEquals(sourceString, outString);
-		}
 	}
 	/**
 	 * 为了测试FileToBrowser(String source,OutputStream out)写的辅助测试方法
@@ -140,17 +65,35 @@ public class TestResponse {
 		assertEquals("", resultFileReader.readLine());
 	}
 	/**
+	 * 为了测试FileToBrowser(String source,OutputStream out)写的辅助测试方法
+	 * 验证从一个文件写入另一个文件的内容是否正确
+	 * @param resultReader
+	 * @param sourceReader
+	 * @throws IOException
+	 */
+	public void checkConten(BufferedReader resultReader,BufferedReader sourceReader)
+			 throws IOException {
+		String sourceString ,outString;
+		while (((sourceString = sourceReader.readLine()) != null)
+				&&((outString = resultReader.readLine()) != null)) {
+			assertEquals(sourceString, outString);
+		}
+	}
+	/**
 	 * 辅助测试fileToBrowser的方法，验证写入的报文头+内容是否正确。测试方法中，
-	 * 我们只是需要传入两个文件的路径就可以完成测试。
+	 * 我们只是需要传入两个文件的路径就可以完成测试。此处注意的是测试的文件c://404.html，
+	 * 这个文件比较特殊，如果把它放入了工程目录下，文件会变大，导致测试部准确。所以必须
+	 * 是测试它的原文件。
+	 * @throws IOException
 	 * */
-	public void subTest(String sourceName,String outPath) throws IOException
+	public void testFileToBroSub(String sourceName,String outPath) throws IOException
 	{
 		Response response = new Response(null);
 		OutputStream out = null;
 		BufferedReader resultFileReader = null;
 		BufferedReader sourceFileReader = null;	
 		File sourceFile = new File(sourceName);
-		if(!sourceFile.exists())
+		if(!sourceFile.exists()||!sourceFile.isFile())
 			{
 			sourceFile = new File("c://404.html");
 			sourceName ="c://404.html";
@@ -172,7 +115,6 @@ public class TestResponse {
 			}
 		}
 	}
-	
 	/**
 	 * 确定这个被测试的方法的参数out,对象肯定不为空.url,file都是不为空的。查看发送的报文头是否正确！
 	 * 
@@ -181,16 +123,16 @@ public class TestResponse {
 	@Test
 	public final void testSendHead() throws IOException {
 		Response response = new Response(null);
-		setSendHeadSub("src/test/java/testfl/test.txt","src/test/java/generfl/test-head.txt", response);
-		setSendHeadSub("src/test/java/testfl/test.txt","src/test/java/generfl/test-head.txt",response);
-		setSendHeadSub("src/test/java/testfl/test.html", "src/test/java/generfl/test-head.txt",response);
-		setSendHeadSub("src/test/java/testfl/aa.png", "src/test/java/generfl/aa-head.txt",response);
-		setSendHeadSub("src/test/java/testfl/bb.jpg", "src/test/java/generfl/bb-head.txt",response);
+		testSendHeadSub("src/test/java/testfl/test.txt","src/test/java/generfl/test-head.txt", response);
+		testSendHeadSub("src/test/java/testfl/test.txt","src/test/java/generfl/test-head.txt",response);
+		testSendHeadSub("src/test/java/testfl/test.html","src/test/java/generfl/test-head.txt",response);
+		testSendHeadSub("src/test/java/testfl/aa.png", "src/test/java/generfl/aa-head.txt",response);
+		testSendHeadSub("src/test/java/testfl/bb.jpg", "src/test/java/generfl/bb-head.txt",response);
 	}
 	/**
 	 * 这个函数大部分功能就是函数checkHead（）的功能，这是因为参数不同才特意新建了函数。
 	 * */
-	public void setSendHeadSub(String sourceName,String outPath,Response response) throws IOException
+	public void testSendHeadSub(String sourceName,String outPath,Response response) throws IOException
 	{
 		OutputStream out = null;
 		BufferedReader resultFileReader = null;
@@ -346,5 +288,4 @@ public class TestResponse {
 		assertNull(map.get(".abc"));
 		assertNull(map.get(".TXt"));
 	}
-	
 }

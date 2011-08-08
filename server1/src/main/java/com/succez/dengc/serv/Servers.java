@@ -45,7 +45,6 @@ public class Servers extends Thread{
      /**
 	 * 继承了Runnable接口，新建一个指定接口监听的ServerSocket对象
 	 * 然后监听到请求，新建一个ResponTOBroswer应答线程放入线程池
-	 * 
 	 * @exception Exception
 	 * */
 	public void run() {
@@ -53,20 +52,23 @@ public class Servers extends Thread{
 		Logger logger = LoggerFactory.getLogger(Servers.class);
 		try {
 			ExecutorService  execuor = Executors.newCachedThreadPool();
-			 server = new ServerSocket(this.port);
+			server = new ServerSocket(this.port);
 			/* 此处一定要while,不要用if,if只判断一次。*/
-			while (listenning) {
+			while (listenning){
 				Response response = new Response(server.accept(),root);
 				execuor.execute(response);
 			}
 		} catch (Exception e) {
-			logger.error("服务器初始化失败！来自方法:【 run()】");
+			logger.error("服务器初始化失败！来自方法:【Server.run()】");
 			return;
 		}finally{
-			try {
-				server.close();
-			} catch (Exception e2) {
-			 logger.error("服务器关闭过程出现错误！来自方法:【 run()】");
+			if(listenning)
+			{
+				try {
+					server.close();
+				} catch (Exception e2) {
+				 logger.error("服务器关闭过程出现错误！来自方法:【 Server.run()】");
+				}
 			}
 		}
 	}
@@ -74,12 +76,6 @@ public class Servers extends Thread{
 	{
 		this.listenning =false;
 	}
-	public static void main(String[] args) {
-		Servers serve = new Servers(8066);
-				serve.start();
-	}
-	
-
 }
 
 
