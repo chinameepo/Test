@@ -49,9 +49,9 @@ public class TestURL {
 	        System.out.println(URLEncoder.encode("Hello World","UTF-8"));
 	        System.out.println(URLDecoder.decode("Hello+World","UTF-8"));
 	        System.out.println(URLDecoder.decode("Hello%20World","UTF-8"));
-	        System.out.println(URLDecoder.decode(" c%","UTF-8"));
+	    //    System.out.println(URLDecoder.decode(" c%","UTF-8"));
 	        System.out.println(URLDecoder.decode("c%20s%20s.txt","UTF-8"));
-	        System.out.println(URLDecoder.decode("@%%%%!!!@@@@30100","UTF-8"));
+	      //  System.out.println(URLDecoder.decode("@%%%%!!!@@@@30100","UTF-8"));
    }
    public void testFile(String name)
    {
@@ -82,6 +82,8 @@ public class TestURL {
 	System.out.println("name is:"+name);
 	testURL.testFile("c://css.txt");*/
 	testURL.throException();
+	 System.out.println(TestURL.class.getResource("").toURI().getPath());
+	 System.out.println(TestURL.class.getResource("src/TestMap.java"));
 }
 	
 }
