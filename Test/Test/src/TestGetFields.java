@@ -1,11 +1,9 @@
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 
 
 /**
@@ -14,9 +12,12 @@ import java.sql.Statement;
  * @version 1.0,创建时间：2011-8-16 下午04:15:04
  * @since   jdk1.5
  * 对于sql中的查询语句，我想要知道我可以查询的行数时多少，然后
- * 我也想要知道关于数据库的更多信息
+ * 我也想要知道关于数据库的更多信息.
+ * 1，查询数据库。
+ * 2，获取字段名字。
+ * 3，获取所在的数据库的名字。
  */
-public class TestSql {
+public class TestGetFields {
 	private Connection connection;
 	private Statement statement;
 	private ResultSet resultSet;
@@ -66,27 +67,19 @@ public class TestSql {
 			ResultSetMetaData metaData =resultSet.getMetaData();
 			System.out.println("一共的列数是："+metaData.getColumnCount());
 			System.out.println("第一列的名字是："+metaData.getColumnName(1));
+			System.out.println("第2列的名字是："+metaData.getColumnName(2));
+			System.out.println("第3列的名字是："+metaData.getColumnName(3));
 			System.out.println("所在的数据库是："+metaData.getCatalogName(1));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	public void getDataBaseInfo(){
-		try {
-			DatabaseMetaData  metaData=connection.getMetaData();
-			System.out.println("分隔符："+metaData.getCatalogSeparator());
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 	public static void main(String[] args) {
-		TestSql sqlTest =new TestSql();
+		TestGetFields sqlTest =new TestGetFields();
 		sqlTest.connect2SQL();
 		sqlTest.analysisi();
 		sqlTest.getDateMate();
-		sqlTest.getDataBaseInfo();
 	}
 }
 

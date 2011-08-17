@@ -10,10 +10,13 @@ import java.sql.Statement;
  * @author  邓超   deng.369@gmail.com
  * @version 1.0,创建时间：2011-8-16 下午06:10:36
  * @since   jdk1.5
- * 我要尝试着用DatabaseMetaData 和ResultSetDatabaseMetaData 这两个类来获取数据库所有数据
- * 
+ * 我要尝试着用DatabaseMetaData 和ResultSetDatabaseMetaData 这两个类来获取数据库所有信息
+ * 1，获取数据库的版本号。
+ * 2，获取驱动版本号。
+ * 3，获取登陆的用户名。
+ * 4，获取所有的表和视图。
  */
-public class TestSQLInfo {
+public class TestGetSQLInfo {
 	private Connection connection;
 	private Statement statement;
 	private ResultSet resultSet;
@@ -26,17 +29,20 @@ public class TestSQLInfo {
 	private String serverName ="127.0.0.1:3306/deng";
 	private String url="jdbc:mysql://"+serverName;
 	private String className="com.mysql.jdbc.Driver";
-	private String query ="select * from student";
-	public TestSQLInfo() {
+	public TestGetSQLInfo() {
 		// TODO Auto-generated constructor stub
 	}
 	public void setConnection(){
 		try {
+			Class.forName(className);
 			connection =DriverManager.getConnection(url,user,pass);
 			if(connection!=null){
 				System.out.println("连接数据库成功！");
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -55,7 +61,7 @@ public class TestSQLInfo {
 			System.out.println("数据库登陆用户是："+databaseMetaData.getUserName());   //获取登录用户名 
 			System.out.println("url是："+databaseMetaData.getURL()); 
 			System.out.println("指定的容器是："+connection.getCatalog());
-			String types[] ={"TABLE"};
+			String types[] ={"TABLE","VIEW"};
 			resultSet  = databaseMetaData.getTables(null, null,"%", types);
 			resultSet.last();
 			System.out.println("这个数据库表个数：："+resultSet.getRow());
@@ -105,7 +111,7 @@ public class TestSQLInfo {
 		}
 	}
 	public static void main(String[] args) {
-		TestSQLInfo sqlInfo = new TestSQLInfo();
+		TestGetSQLInfo sqlInfo = new TestGetSQLInfo();
 		sqlInfo.getTable();
 	}
 }

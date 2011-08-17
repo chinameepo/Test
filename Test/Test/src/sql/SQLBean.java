@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * @author 邓超 deng.369@gmail.com
  * @version 1.0,创建时间：2011-8-17 上午10:09:24
  * @since jdk1.5
- *  一个可以连接数据库的bean，一次性注入，永久好用。这个现在只是支持查询的而已，到时候看情况在说吧。
+ *  一个可以连接数据库的bean，一次性注入，永久好用。这个现在只是支持查询的而已，暂时先不用spring注入。
  * 
  */
 public class SQLBean {
@@ -24,7 +24,6 @@ public class SQLBean {
 	private ResultSet resultSet;
 	private String user = "root";
 	private String pass = "dengchao";
-
 	private String url = "jdbc:mysql://127.0.0.1:3306/" ;
 	private String className = "com.mysql.jdbc.Driver";
     private Logger logger =LoggerFactory.getLogger(getClass());
@@ -33,6 +32,7 @@ public class SQLBean {
 	 * @param dataBaseName
 	 */
 	public SQLBean(String dataBaseName) {
+		
 		this.url = this.url + dataBaseName;
 		try {
 			Class.forName(className);
