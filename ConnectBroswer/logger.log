@@ -1,0 +1,97 @@
+18468 [pool-1-thread-1] INFO  esensoft.thread.ResponTOBroswer - 文件名是：aa.png
+5750 [pool-1-thread-1] INFO  esensoft.thread.ResponTOBroswer - 文件名是：aa.png
+7188 [pool-1-thread-1] INFO  esensoft.thread.ResponTOBroswer - 文件名是：index.html
+9359 [pool-1-thread-1] INFO  esensoft.thread.ResponTOBroswer - 文件名是：Temp/test.txt
+11969 [pool-1-thread-1] INFO  esensoft.thread.ResponTOBroswer - 文件名是：test.html
+16109 [pool-1-thread-1] INFO  esensoft.thread.ResponTOBroswer - 文件名是：index.html
+19813 [pool-1-thread-1] INFO  esensoft.thread.ResponTOBroswer - 文件名是：index.html
+23984 [pool-1-thread-1] INFO  esensoft.thread.ResponTOBroswer - 文件名是：fef
+23984 [pool-1-thread-1] ERROR esensoft.thread.ResponTOBroswer - 程序要找的文件fef找磁盘上找不到！将会用404页面来替代这个文件返回！
+4062 [main] INFO  esensoft.thread.ResponTOBroswer - 文件名是：index.html
+4078 [main] INFO  esensoft.thread.ResponTOBroswer - 文件名是：c s s.txt
+4078 [main] INFO  esensoft.thread.ResponTOBroswer - 文件名是：aa.png
+4078 [main] INFO  esensoft.thread.ResponTOBroswer - 文件名是：test.txt
+4078 [main] INFO  esensoft.thread.ResponTOBroswer - 文件名是：c s s.txt
+4078 [main] INFO  esensoft.thread.ResponTOBroswer - 文件名是：c s s.txt
+5078 [main] ERROR esensoft.thread.TestResponToBro - IOExcptpion with socket init
+360  [Thread-0] ERROR esensoft.thread.Serve - 服务器初始化失败！
+375  [Thread-0] ERROR esensoft.thread.Serve - 服务器关闭过程出现错误！
+157  [Thread-0] ERROR esensoft.thread.Serve - 服务器初始化失败！
+157  [Thread-0] ERROR esensoft.thread.Serve - 服务器关闭过程出现错误！
+140  [Thread-0] ERROR esensoft.thread.Serve - 服务器初始化失败！
+140  [Thread-0] ERROR esensoft.thread.Serve - 服务器关闭过程出现错误！
+4391 [pool-1-thread-1] INFO  esensoft.thread.Response - 请求的报文头是：GET /aa.png HTTP/1.1
+Accept: */*
+ThreadID: 2064
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; SE 2.X MetaSr 1.0)
+Host: 127.0.0.1:8066
+Connection: Keep-Alive
+Cookie: __utma=96992031.961023515.1311640860.1311640860.1311732578.2; __utmz=96992031.1311640860.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+4391 [pool-1-thread-1] INFO  esensoft.thread.Response - 文件名是：aa.png
+17985 [pool-1-thread-1] INFO  esensoft.thread.Response - 请求的报文头是：GET /test.txt HTTP/1.1
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, */*
+ThreadID: 2064
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; SE 2.X MetaSr 1.0)
+Host: 127.0.0.1:8066
+Connection: Keep-Alive
+Cookie: __utma=96992031.961023515.1311640860.1311640860.1311732578.2; __utmz=96992031.1311640860.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+17985 [pool-1-thread-1] INFO  esensoft.thread.Response - 文件名是：test.txt
+4156 [pool-1-thread-1] INFO  esensoft.thread.Response - 请求的报文头是：GET /bb.jpg HTTP/1.1
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, */*
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)
+Host: 127.0.0.1:8066
+Connection: Keep-Alive
+Cookie: __utma=96992031.961023515.1311640860.1311640860.1311732578.2; __utmz=96992031.1311640860.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+4156 [pool-1-thread-1] INFO  esensoft.thread.Response - 文件名是：bb.jpg
+7953 [pool-1-thread-1] INFO  esensoft.thread.Response - 请求的报文头是：GET /aa.png HTTP/1.1
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, */*
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)
+Host: 127.0.0.1:8066
+Connection: Keep-Alive
+Cookie: __utma=96992031.961023515.1311640860.1311640860.1311732578.2; __utmz=96992031.1311640860.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+7953 [pool-1-thread-1] INFO  esensoft.thread.Response - 文件名是：aa.png
+10500 [pool-1-thread-1] INFO  esensoft.thread.Response - 请求的报文头是：GET /aa.pn HTTP/1.1
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, */*
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)
+Host: 127.0.0.1:8066
+Connection: Keep-Alive
+Cookie: __utma=96992031.961023515.1311640860.1311640860.1311732578.2; __utmz=96992031.1311640860.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+10500 [pool-1-thread-1] INFO  esensoft.thread.Response - 文件名是：aa.pn
+10500 [pool-1-thread-1] ERROR esensoft.thread.Response - 程序要找的文件aa.pn找磁盘上找不到！将会用404页面来替代这个文件返回！
+5641 [pool-1-thread-1] INFO  esensoft.thread.Response - 请求的报文头是：GET /aa.png HTTP/1.1
+Accept: */*
+ThreadID: 2848
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; SE 2.X MetaSr 1.0)
+Host: 127.0.0.1:8066
+Connection: Keep-Alive
+Cookie: __utma=96992031.961023515.1311640860.1311640860.1311732578.2; __utmz=96992031.1311640860.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+5656 [pool-1-thread-1] INFO  esensoft.thread.Response - 文件名是：aa.png
+7344 [pool-1-thread-1] INFO  esensoft.thread.Response - 请求的报文头是：GET /test.txt HTTP/1.1
+Accept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, */*
+ThreadID: 2848
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; SE 2.X MetaSr 1.0)
+Host: 127.0.0.1:8066
+Connection: Keep-Alive
+Cookie: __utma=96992031.961023515.1311640860.1311640860.1311732578.2; __utmz=96992031.1311640860.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
+
+7344 [pool-1-thread-1] INFO  esensoft.thread.Response - 文件名是：test.txt
