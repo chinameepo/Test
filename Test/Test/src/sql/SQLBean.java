@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.text.AbstractDocument.LeafElement;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,24 +29,20 @@ public class SQLBean {
 	private String url = "jdbc:mysql://127.0.0.1:3306/" ;
 	private String className = "com.mysql.jdbc.Driver";
     private Logger logger =LoggerFactory.getLogger(getClass());
+    private String dataBaseName;
 	/**
 	 * 我们只需要指定是在用哪个数据库即可。
 	 * @param dataBaseName
 	 */
 	public SQLBean(String dataBaseName) {
-		
+		this.dataBaseName =dataBaseName;
 		this.url = this.url + dataBaseName;
 		try {
 			Class.forName(className);
-			connection = DriverManager.getConnection(url , user, pass);
-			statement = connection.createStatement();
 		} catch (ClassNotFoundException e) {
 			logger.error("驱动加载失败");
 			return;
-		} catch (SQLException e) {
-			logger.error("连接数据库出错");
-			return;
-		}
+		} 
 	}
 	public SQLBean(){
 		this("");
@@ -52,6 +50,8 @@ public class SQLBean {
 	public void connect(){
 		try {
 			connection = DriverManager.getConnection(url , user, pass);
+			if(connection!=null)
+				logger.info("数据库{}连接成功~！",dataBaseName);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,6 +71,7 @@ public class SQLBean {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("语句执行出错了！");
 		}
 	}
 	public void close(){
