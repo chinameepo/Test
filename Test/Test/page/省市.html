@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<HEAD>
+<TITLE>全国地区树形列表</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=GB2312">
+<style>
+td {
+	font-size: 12px
+}
+
+div {
+	font-family: 宋体
+}
+
+div.tree_add {
+	background: url(treeline_2.gif) no-repeat left;
+	padding-left: 24px;
+	padding-top: 3px;
+	color: blue;
+	cursor: hand
+}
+
+div.tree_1 {
+	background: url(ico_top1.gif) no-repeat left middle;
+	padding-top: 3px;
+	font-size: 15px;
+	padding- left: 20px;
+	cursor: hand;
+	color: blue
+}
+
+div.tree_2 {
+	padding-left: 100px;
+	background: url(treeline_1.gif) 100px repeat-y;
+	font-size: 14px
+}
+
+div.tree_3 {
+	background: url(treeline_2.gif) no-repeat left;
+	padding-left: 24px;
+	padding-top: 3px
+}
+</style>
+
+
+<script language="JavaScript">
+function line(obj)//添加下划线
+{
+obj.style.textDecoration='underline';
+}
+function delline(obj)//取消下划线
+{
+obj.style.textDecoration='none';
+}
+function showtree(str)//展开|关闭子分支
+{
+	/*innerHTML设置或返回表格行的开始和结束标签之间的 HTML，将span标签变成另外的span标签
+	这个里面，其实就是设置+号那个位置的字符*/
+var eval1="span_"+str+".innerHTML=span_"+str+".innerHTML=='+'?'-':'+'";
+	//OBJ.style.display，设定关闭某个元素。
+var eval2=str+"_value.style.display="+str+"_value.style.display=='none'?'':'none'";
+	
+	/*函数可计算某个字符串，并执行其中的的 JavaScript 代码。通过计算 string 得到的值（如果有的话）。
+	eval(x+17))
+*/
+eval(eval1);
+eval(eval2);
+}
+</script>
+
+
+</HEAD>
+<BODY style="MARGIN: 0px">
+	<table>
+		<tr>
+		    <!-- padding 简写属性在一个声明中设置所有内边距属性。-->
+			<td width=80% style="padding: 30px">
+			    <!-- 规定方法：如果鼠标移动过来就有下划线，如果走开下划线移除。
+			            如果点击的话，要么显示，要么关闭 -->
+				<div class=tree_1 onmouseover="line(this)"
+					onMouseOut="delline(this)" onClick="showtree('directly')">
+					
+					直辖市 <span id=span_directly style="color: red">+</span>
+				</div>
+				<div id=directly_value class=tree_2 style="display: none">
+					<div class=tree_3>北京（京）</div>
+					<div class=tree_3>上海（沪）</div>
+					<div class=tree_3>天津（津）</div>
+					<div class=tree_3>重庆（渝）</div>
+				</div> 
+				<br>
+			<br>
+			
+			
+
+                <!-- 分层次，第一层叫做tree1,二层叫做tree2 -->
+				<div class=tree_1 onMouseOver="line(this)"
+					onMouseOut="delline(this)" onClick="showtree('state')">
+					省 市 <span id=span_state style="color: gray">+</span>
+				</div>
+				
+				<div id=state_value class=tree_2 style="display: none">
+					<div class=tree_add onMouseOver="line(this)"
+						onMouseOut="delline(this)" onClick="showtree('state_hebei')">
+						河北省（冀 ） <span id=span_state_hebei style="color: gray">+</span>
+					</div>
+					<div id=state_hebei_value class=tree_2 style="display: none">
+						<div class=tree_add onMouseOver="line(this)"
+							onMouseOut="delline(this)" onClick="showtree('city_baoding')">
+							保定 市 <span id=span_city_baoding style="color: gray">+</span>
+						</div>
+						<div id=city_baoding_value class=tree_2 style="display: none">
+							<div class=tree_3>徐水县</div>
+						</div>
+						<div class=tree_add onMouseOver="line(this)"
+							onMouseOut="delline(this)" onClick="showtree('city_handan')">
+							邯郸市 <span id=span_city_handan style="color: gray">+</span>
+						</div>
+						<div id=city_handan_value class=tree_2 style="display: none">
+							<div class=tree_3>曲周县</div>
+						</div>
+						<div class=tree_add onMouseOver="line(this)"
+							onMouseOut="delline(this)"
+							onClick="showtree('city_shijiazhuang')">
+
+							石家庄市 <span id=span_city_shijiazhuang style="color: gray">+</span>
+						</div>
+						<div id=city_shijiazhuang_value class=tree_2 style="display: none">
+							<div class=tree_3>晋州市</div>
+						</div>
+						<div class=tree_add onMouseOver="line(this)"
+							onMouseOut="delline(this)" onClick="showtree('city_langfang')">
+							廊坊 市 <span id=span_city_langfang style="color: gray">+</span>
+						</div>
+						<div id=city_langfang_value class=tree_2 style="display: none">
+							<div class=tree_3>香河县</div>
+						</div>
+						<div class=tree_add onMouseOver="line(this)"
+							onMouseOut="delline(this)" onClick="showtree('city_tangshan')">
+							唐山 市 <span id=span_city_tangshan style="color: gray">+</span>
+						</div>
+						<div id=city_tangshan_value class=tree_2 style="display: none">
+							<div class=tree_3>玉田县</div>
+						</div>
+					</div>
+			     </div>
+			</td>
+		</tr>
+	</table>
+</html>
+
+

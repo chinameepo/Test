@@ -1,10 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE script PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<title> 数据库结构&raquoTree</title>
-	<link rel="StyleSheet" href="dtree.css" type="text/css" />
-	<script type="text/javascript" src="dtree.js"></script>
-	<style type="text/css">
+<style>
+
 #customers
   {
   font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -34,33 +32,95 @@
   color:#000000;
   background-color:#EAF2D3;
   }
+
+div {
+	font-family: 宋体
+}
+
+div.tree_add {
+	background: url(treeline_2.gif) no-repeat left;
+	padding-left: 24px;
+	padding-top: 3px;
+	color: blue;
+	cursor: hand
+}
+
+div.tree_1 {
+	background: url(ico_top1.gif) no-repeat left middle;
+	padding-top: 3px;
+	font-size: 15px;
+	padding- left: 20px;
+	cursor: hand;
+	color: blue
+}
+
+div.tree_2 {
+	padding-left: 100px;
+	background: url(treeline_1.gif) 100px repeat-y;
+	font-size: 14px
+}
+
+div.tree_3 {
+	background: url(treeline_2.gif) no-repeat left;
+	padding-left: 24px;
+	padding-top: 3px
+}
 </style>
+<script language="JavaScript">
+function line(obj)//添加下划线
+{
+obj.style.textDecoration='underline';
+}
+function delline(obj)//取消下划线
+{
+obj.style.textDecoration='none';
+}
+function showtree(str)//展开|关闭子分支
+{
+	/*innerHTML设置或返回表格行的开始和结束标签之间的 HTML，将span标签变成另外的span标签
+	这个里面，其实就是设置+号那个位置的字符*/
+var eval1="span_"+str+".innerHTML=span_"+str+".innerHTML=='+'?'-':'+'";
+	//OBJ.style.display，设定关闭某个元素。
+var eval2=str+"_value.style.display="+str+"_value.style.display=='none'?'':'none'";
+	
+	/*函数可计算某个字符串，并执行其中的的 JavaScript 代码。通过计算 string 得到的值（如果有的话）。
+	eval(x+17))
+*/
+eval(eval1);
+eval(eval2);
+}
+</script>
 </head>
 
-
 <body>
-   <h2>导航</h2>
-   <div class="dtree">
-	  <p><a href="javascript: d.openAll();">展开</a> | <a href="javascript: d.closeAll();">关闭</a></p>
-	 <script type="text/javascript">
-	    d = new dTree('d');
-		d.add(0,-1,'我的数据库结构');
-		<#if tree??>
-		<#list tree as x>
-		  <#if (x.url??)>    
-		  d.add(${x.id},${x.prentid},'${x.name}','${x.url}');
-		  <#else >
-		  d.add(${x.id},${x.prentid},'${x.name}');
+  <div>
+   <table>
+     <tr>
+        <td width=80% style="padding: 30px">
+        <#if tree??>
+         <#list tree as x>
+           <div class=tree_1 onmouseover="line(this)"onMouseOut="delline(this)" onClick="showtree('${x.name}')">
+			  <img alt="database" src="img/folder.png">
+			  <a href="database.do?database=${x.name}">${x.name}
+			  <span id=span_${x.name} style="color: red">+</span>
+		  </div >
+		   <#if (x.child??)>
+             <div id="${x.name}_value" class=tree_2 style="display:none">
+		     <#list x.child as y>
+		            <div class=tree_3 >
+                    <img alt="table" src="/img/page.png">
+					<a href="table.do?database=${x.name}&table=${y}">${y}</a>
+		            </div>
+		     </#list>
+           </div>
 		  </#if>
-		</#list>
-		<#else>
-		<#--如果树为空，什么都不做-->
-		</#if>
-		d.add(99999,0,'执行SQL','sqlexe.do');
-		document.write(d);
-	 </script>
+         </#list>
+        </#if>
+        </td>
+     </tr>
+   </table>
    </div>
-   
+
    <div class ="show"  style= "overflow:auto " >
     <#if (tables??)>
        <table id="customers">

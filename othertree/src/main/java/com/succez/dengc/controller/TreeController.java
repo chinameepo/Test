@@ -24,21 +24,36 @@ import com.succez.dengc.handle.TreeHandle;
 public class TreeController {
 
 	private ArrayList<TreeBean> list;
-	@SuppressWarnings({ "unchecked", "rawtypes", "static-access" })
+	private TreeHandle handle;
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/free.do")
 	public ModelAndView handleRequest() {
-		TreeHandle handle = new TreeHandle();
-		handle.setId(1);
+		handle = new TreeHandle();
 		list =handle.genTree();
 		Map rootMap = new HashMap();
 		rootMap.put("tree", list);
 		rootMap.put("tables", null);
 		return new ModelAndView("template", rootMap);
 	}
+	/**
+	 * 点击某个数据库后，增量展开树形结构
+	 * */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping("/database.do")
+	public ModelAndView openDatabaseTree(@RequestParam("database")String database){
+        String[]tables =handle.getOneClume(database, "show tables");
+        handle.getMap().get(database).setChild(tables);
+        Map rootMap = new HashMap();
+        rootMap.put("tree", list);
+        rootMap.put("tables", null);
+        return new ModelAndView("template",rootMap);
+	}
 
+	/*点击可以展开某个数据库下面某个表的结构*/
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/table.do")
-	public ModelAndView dataBaseTree(@RequestParam("database") String database,
+	public ModelAndView tableTree(@RequestParam("database") String database,
 			@RequestParam("table") String table) {
 		TableProducerHandle tablehandle = new TableProducerHandle(database,
 				table);
@@ -48,5 +63,6 @@ public class TreeController {
 		rootMap.put("tables", tableContent);
 		return new ModelAndView("template", rootMap);
 	}
+	
 	
 }

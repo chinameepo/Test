@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.succez.dengc.bean.SQLBean;
 import com.succez.dengc.bean.TreeBean;
 
@@ -27,24 +26,28 @@ import com.succez.dengc.bean.TreeBean;
     pid     ：节点的父节点的id
     name    ：节点显示在页面上的名称
     url     ：节点的链接地址
-
+ */
+/**
+ * @author Administrator
+ *
  */
 public class TreeHandle {
 	private ArrayList<TreeBean> list ;
-	private Map<String, TreeBean> map;
+	private Map<String,TreeBean> map;
 	private String[]database ;
 	private ResultSet resultSet;
-	private static int id =1;
 	private ApplicationContext aplcxt = new ClassPathXmlApplicationContext("spring.xml");
 	private Logger logger =LoggerFactory.getLogger(getClass());
 	
+	
+	/**
+	 * 生成树的结构
+	 * @return
+	 */
 	public ArrayList<TreeBean> genTree(){
 		list = new ArrayList<TreeBean>();
 		map = new HashMap<String, TreeBean>();
 		getDataBase();
-	    for(int i=0;i<database.length;i++){
-			getTable(database[i]);
-		}
 	    return list;
 	}
 	
@@ -55,38 +58,13 @@ public class TreeHandle {
 		database =getOneClume(null,"show databases");
 		for(int i=0;i<database.length;i++){
 			TreeBean bean =(TreeBean)aplcxt.getBean("treeBean");
-			bean.setId(id);
-			bean.setPrentid(0);
 			bean.setName(database[i]);
 			//点击这个数据库的节点，我们不需要它跳转到某个页面，所以就设置成空的。
-			bean.setUrl("");
 			list.add(bean);
 			map.put(database[i],bean);
-			id++;
 		}
 	}
 	
-
-
-	/**
-	 * 获得指定数据下面的所有表名称.获取它们的父亲ID，然后并且给它们编号，存在一个treeBean里面。
-	 * @param dataBase
-	 */
-	public void getTable(String dataBase){
-		String[] tables =getOneClume(dataBase, "show tables ");
-		TreeBean bean =map.get(dataBase);
-		int parentId =bean.getId();
-		for(int i=0;i<tables.length;i++){
-			TreeBean tableBean =(TreeBean)aplcxt.getBean("treeBean");
-			tableBean.setId(id);
-			id++;
-			tableBean.setPrentid(parentId);
-			tableBean.setName(tables[i]);
-			//我这么命名的原因，是因为到时候我要从这个Url的请求里面获取数据库的名字和数据库的表名。
-			tableBean.setUrl("table.do?database="+dataBase+"&table="+tables[i]);
-			list.add(tableBean);
-		}
-	}
 	
 	/**
 	 * 获取查询结果集中第一列的所有元素。通过这个函数可以获得数据库名称、数据库下面的表的名称。
@@ -147,9 +125,11 @@ public class TreeHandle {
 	public void setList(ArrayList<TreeBean> list) {
 		this.list = list;
 	}
-	public static void setId(int id) {
-		TreeHandle.id = id;
+
+	public Map<String, TreeBean> getMap() {
+		return map;
 	}
+	
 
 }
 

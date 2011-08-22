@@ -81,8 +81,11 @@ public class SQLBean {
 
 	public void close() {
 		try {
+			if(resultSet!=null)
 			resultSet.close();
+			if(statement!=null)
 			statement.close();
+			if(connection!=null)
 			connection.close();
 		} catch (Exception e) {
 			logger.error("来自方法：SQLBean【close()】"+e.toString());
