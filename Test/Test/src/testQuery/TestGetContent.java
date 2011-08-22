@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * 获取一个表里面的内容。
  */
 public class TestGetContent {
-	 private String database;
+	    private String database;
 	    private String table;
 	    /**
 	     * 这个表一共有几行几列
@@ -27,7 +27,7 @@ public class TestGetContent {
 	    /**
 	     * 别人发过来的请求，要求看我的数据库表的内容，我就通过这个url来获取我要的数据库名字和表名字。
 	     */
-	    private String url = "/newtree/information_schema==CHARACTER_SETS.action";
+	    private String url = "/newtree/deng==student.action";
 	    /**
 	     * 所有的字段我先保存在这里面
 	     */
@@ -35,6 +35,7 @@ public class TestGetContent {
 	    private String [][] content;
 	    private ResultSet resultSet;
 	    private Logger logger = LoggerFactory.getLogger(getClass());
+	    
 
 		/**
 		 * 这样可以获得数据库名字，表名字。其实最关键的是url中包含了==号。
@@ -46,11 +47,10 @@ public class TestGetContent {
 			String keyString = url.substring(key + 1);
 			String[] infoStrings = keyString.split("==");
 			database =infoStrings[0];
-			table =infoStrings[1];
+			int indexOfDot =infoStrings[1].indexOf('.');
+			table =infoStrings[1].substring(0,indexOfDot);
 		}
-		public void  geneHTML(){
-			
-		}
+
 		/**
 		 * 获取查询结果集的行数
 		 * @param resultSet
@@ -76,8 +76,7 @@ public class TestGetContent {
 		 */
 		public void getDateMate(){
 			try {
-				SQLBean bean = new SQLBean();
-				bean.setDatabaseName(database);
+				SQLBean bean = new SQLBean(database);
 				bean.connect();
 				bean.statement();
 				if((database!=null)&&(!"".equals(database))){
@@ -105,9 +104,14 @@ public class TestGetContent {
 			}
 		}
 		public void print(){
+			StringBuffer buffer1 = new StringBuffer();
+			for(int i=0;i<clum;i++){
+				buffer1.append(fields[i]+",	");
+			}
+			System.out.println(buffer1.toString());
 			for(int i=0;i<row;i++){
 				StringBuffer buffer = new StringBuffer();
-				for(int j=0;i<clum;j++){
+				for(int j=0;j<clum;j++){
 					buffer.append(content[i][j]+",	");
 				}
 				System.out.println(buffer);

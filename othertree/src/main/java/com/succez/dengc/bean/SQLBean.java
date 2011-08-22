@@ -1,13 +1,14 @@
-package testQuery;
+package com.succez.dengc.bean; 
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * All right resrvered esensoft(2011)
@@ -21,20 +22,14 @@ public class SQLBean {
 	private Connection connection;
 	private Statement statement;
 	private ResultSet resultSet;
-	private String user = "root";
-	private String pass = "dengchao";
-	private String url = "jdbc:mysql://127.0.0.1:3306/" ;
-	private String className = "com.mysql.jdbc.Driver";
-	
 	private Logger logger = LoggerFactory.getLogger(getClass());
-
+    private ComboPooledDataSource dataSource;
 	/**
 	 * 我们只需要指定是在用哪个数据库即可。
 	 * 
 	 * @param dataBaseName
 	 */
-	public SQLBean(String database) {
-		this.url =this.url+database;
+	public SQLBean(){
 	}
 
 	/**
@@ -42,14 +37,10 @@ public class SQLBean {
 	 */
 	public void connect() {
 		try {
-			Class.forName(className);
-			connection = DriverManager.getConnection(url, user, pass);
+			connection = dataSource.getConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			logger.error("来自方法：SQLBean【connect()】"+e.toString());
-			return;
-		}catch (ClassNotFoundException e) {
-			logger.error("驱动加载失败，来自方法：SQLBean【SQLBean】");
 			return;
 		}
 	}
@@ -111,25 +102,12 @@ public class SQLBean {
 		this.resultSet = resultSet;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-	public void setPass(String pass) {
-		this.pass = pass;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public void setClassName(String className) {
-		this.className = className;
-	}
-
 	public void setLogger(Logger logger) {
 		this.logger = logger;
 	}
 
-	
+	public void setDataSource(ComboPooledDataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 }
+

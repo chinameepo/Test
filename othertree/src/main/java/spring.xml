@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+    "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<!--DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.sprintframework.org/dtd/spring-beans.dtd" -->
+<beans>
+    <!-- 一个树形结构的生成bean，每个bean作为一个节点存入。 -->
+	<bean id="treeBean" class="com.succez.dengc.bean.TreeBean"
+		scope="prototype">
+   </bean>
+   <!-- 一个数据库连接建立的bean，每个bean建立一个数据库连接，注意要关闭啊！ -->
+   <bean id="sqlBeans" class="com.succez.dengc.bean.SQLBean"
+		scope="prototype">
+		<property name="dataSource">
+		<ref bean="dataSourceBean" />
+		</property>
+   </bean>
+   
+    <!-- C3P0数据连接池的建立 -->
+   <bean id="dataSourceBean" class="com.mchange.v2.c3p0.ComboPooledDataSource"    destroy-method="close">
+          <property name="driverClass"><value>com.mysql.jdbc.Driver</value></property>
+          <property name="jdbcUrl"><value>jdbc:mysql://127.0.0.1:3306/deng</value></property>               
+          <property name="user"><value>root</value></property>
+          <property name="password"><value>dengchao</value></property>
+          <property name="minPoolSize"><value>1</value></property>
+          <property name="maxPoolSize"><value>20</value></property>
+          <property name="maxIdleTime"><value>1800</value></property>
+          <property name="acquireIncrement"><value>2</value></property>
+          <property name="maxStatements"><value>0</value></property>
+          <property name="initialPoolSize"><value>2</value></property>
+          <property name="idleConnectionTestPeriod"><value>1800</value></property>
+          <property name="acquireRetryAttempts"><value>30</value></property>
+          <property name="breakAfterAcquireFailure"><value>true</value></property>
+          <property name="testConnectionOnCheckout"><value>false</value></property>
+</bean>
+</beans>
+
+

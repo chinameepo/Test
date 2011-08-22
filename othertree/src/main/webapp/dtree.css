@@ -1,0 +1,56 @@
+/*--------------------------------------------------|
+| dTree 2.05 | www.destroydrop.com/javascript/tree/ |
+|---------------------------------------------------|
+| Copyright (c) 2002-2003 Geir Landr�               |
+|--------------------------------------------------*/
+
+.show{
+	position:absolute;
+    left:24%;
+    top:6%;
+    border-style: solid ;     
+    border-width: 3px ;    
+    border-color: pink ;
+    height:600;
+    width:800;
+    overFlow: auto ;  /* visible ：却省的 hidden auto scroll */
+    overFlow-x: scroll ;
+    overFlow-y: scroll ;   
+     scrollBar-face-color: green;        /* 滑块 */
+     scrollBar-hightLight-color: red;    /* 高亮 */
+     scrollBar-3dLight-color: orange;    /* 3维光线 */
+     scrollBar-darkshadow-color:blue;    /* 暗影    */
+     scrollBar-shadow-color:yellow;      /* 阴影   */
+     scrollBar-arrow-color:purple;       /* 箭头 */
+     scrollBar-track-color:black;         /* 滑道颜色 */
+     scrollBar-base-color:pink;          /* 主要颜色 */
+}
+
+.dtree {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #666;
+	white-space: nowrap;
+}
+.dtree img {
+	border: 0px;
+	vertical-align: middle;
+}
+.dtree a {
+	color: #333;
+	text-decoration: none;
+}
+.dtree a.node, .dtree a.nodeSel {
+	white-space: nowrap;
+	padding: 1px 2px 1px 2px;
+}
+.dtree a.node:hover, .dtree a.nodeSel:hover {
+	color: #333;
+	text-decoration: underline;
+}
+.dtree a.nodeSel {
+	background-color: #c0d2ec;
+}
+.dtree .clip {
+	overflow: hidden;
+}
