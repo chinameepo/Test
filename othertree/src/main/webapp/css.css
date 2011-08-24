@@ -1,0 +1,302 @@
+@charset "UTF-8";
+
+/*没有选中时的样式*/
+.standartTreeRow,.selectedTreeRow {
+	color: #000000;
+	background: transparent;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	-moz-user-select: none;
+	padding: 3px 2px;
+	margin: 0;
+	cursor: pointer;
+}
+
+/*选择结点时的样式*/
+.selectedTreeRow {
+	background: #3399FF;
+	color: #FFFFFF;
+}
+
+.standartTreeImage {
+	overflow: hidden;
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+/*??*/
+.hiddenRow {
+	width: 1px;
+	overflow: hidden;
+	display: none;
+}
+
+/*等待提示的图标，用来在异步加载时显示*/
+.xtree_waitingIcon {
+	background: transparent url(img/indicator_tiny_red.gif)
+		no-repeat center center;
+	width: 10px;
+	height: 10px;
+	border: none;
+	overflow: hidden;
+}
+
+/*定义了与树控件中相关的图标，其中包括了线、展开与收起、勾选与未勾选等图标，由于这些图标都放在了一张图片中，所以下面的样式是共用的，个体中仅对图片的偏移做改变*/
+.xtree_blank,.xtree_line1,.xtree_line2,.xtree_line3,.xtree_line4,.xtree_plus1,.xtree_plus2,.xtree_plus3,.xtree_plus4,.xtree_plus5,.xtree_minus1,.xtree_minus2,.xtree_minus3,.xtree_minus4,.xtree_minus5,.xtree_uncheck,.xtree_checked,.xtree_checked2,.xtree_grayChecked,.xtree_grayChecked2
+	{
+	background: transparent url( img/xtree.gif ) no-repeat 0
+		50%;
+	width: 19px;
+	height: 100%;
+	display: block;
+}
+
+/*线型：│*/
+.xtree_line1 {
+	background-repeat: repeat-y;
+	background-position: -19px 0;
+	/*
+	Firefox中如果页面是XHTML时，td中垂直平铺图片时如不设置display为table-cell则不会平铺到底的
+	----------------------------------------------------------*/
+	height: 100%;
+	display: table-cell;
+}
+
+/*线型：└*/
+.xtree_line2 {
+	background-position: -38px 50%;
+}
+
+/*线型：├*/
+.xtree_line3 {
+	background-position: -57px 50%;
+}
+
+/*线型：┌*/
+.xtree_line4 {
+	background-position: -76px 50%;
+}
+
+/*收起：+*/
+.xtree_plus1 {
+	background-position: -95px 50%;
+}
+
+/*收起：+└*/
+.xtree_plus2 {
+	background-position: -114px 50%;
+}
+
+/*收起：+├*/
+.xtree_plus3 {
+	background-position: -133px 50%;
+}
+
+/*收起：+┌*/
+.xtree_plus4 {
+	background-position: -152px 50%;
+}
+
+/*收起：+-*/
+.xtree_plus5 {
+	background-position: -171px 50%;
+}
+
+/*展开：-*/
+.xtree_minus1 {
+	background-position: -190px 50%;
+}
+
+/*展开：-└*/
+.xtree_minus2 {
+	background-position: -209px 50%;
+}
+
+/*展开：-├*/
+.xtree_minus3 {
+	background-position: -228px 50%;
+}
+
+/*展开：-┌*/
+.xtree_minus4 {
+	background-position: -247px 50%;
+}
+
+/*展开：--*/
+.xtree_minus5 {
+	background-position: -266px 50%;
+}
+
+.xtree_uncheck,.xtree_checked,.xtree_checked2,.xtree_grayChecked,.xtree_grayChecked2 {width:16px;height:16px;}
+/*未勾选*/
+.xtree_uncheck {
+	background-position: -285px 50%;
+}
+
+/*已经勾选的状态：√*/
+.xtree_checked {
+	background-position: -304px 50%;
+}
+
+/*已经勾选的状态：×*/
+.xtree_checked2 {
+	background-position: -323px 50%;
+}
+
+/*灰掉的勾选状态：√*/
+.xtree_grayChecked {
+	background-position: -342px 50%;
+}
+
+/*灰掉的勾选状态：×*/
+.xtree_grayChecked2 {
+	background-position: -361px 50%;
+}
+
+/*可以通过该样式来定义树组件的背景*/
+.xtree_bg {
+	
+}
+
+/*根结点的样式*/
+.xtree {
+	width: 100%;
+}
+
+/*子结点的样式*/
+.xtree_node {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+/*箭头风格：定义了与树控件中相关的图标，其中包括了展开与收起、移入展开与收起等图标，由于这些图标都放在了一张图片中，所以下面的样式是共用的，个体中仅对图片的偏移做改变*/
+.xtree_arrow_plus,.xtree_arrow_minus,.xtree_arrow_minus2,.xtree_arrow_plus:hover,.xtree_arrow_minus:hover,.xtree_arrow_minus2:hover
+	{
+	background: transparent url( img/xtree_arrow.gif )
+		no-repeat 0 50%;
+	width: 19px;
+	height: 100%;
+}
+
+/*收起：+*/
+.xtree_arrow_plus {
+	background-position: -95px 50%;
+}
+
+/*展开：-*/
+.xtree_arrow_minus {
+	background-position: -190px 50%;
+}
+
+/*展开样式2：-*/
+.xtree_arrow_minus2 {
+	background-position: -209px 50%;
+}
+
+/*移入到收起图标中的样式*/
+.xtree_arrow_plus:hover {
+	background-position: -380px 50%;
+}
+
+/*移入到展开图标中的样式*/
+.xtree_arrow_minus:hover {
+	background-position: -399px 50%;
+}
+
+/*移入到展开图标中的样式*/
+.xtree_arrow_minus2:hover {
+	background-position: -399px 50%;
+}
+.show{
+	position:absolute;
+    left:24%;
+    top:6%;
+    border-style: solid ;     
+    border-width: 3px ;    
+    border-color: pink ;
+    height:600;
+    width:800;
+    overFlow: auto ;  /* visible ：却省的 hidden auto scroll */
+    overFlow-x: scroll ;
+    overFlow-y: scroll ;   
+     scrollBar-face-color: green;        /* 滑块 */
+     scrollBar-hightLight-color: red;    /* 高亮 */
+     scrollBar-3dLight-color: orange;    /* 3维光线 */
+     scrollBar-darkshadow-color:blue;    /* 暗影    */
+     scrollBar-shadow-color:yellow;      /* 阴影   */
+     scrollBar-arrow-color:purple;       /* 箭头 */
+     scrollBar-track-color:black;         /* 滑道颜色 */
+     scrollBar-base-color:pink;          /* 主要颜色 */
+}
+
+#customers
+  {
+  font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+  width:100%;
+  border-collapse:collapse;
+  }
+
+#customers td, #customers th 
+  {
+  font-size:1em;
+  border:1px solid #98bf21;
+  padding:3px 7px 2px 7px;
+  }
+
+#customers th 
+  {
+  font-size:1.1em;
+  text-align:left;
+  padding-top:5px;
+  padding-bottom:4px;
+  background-color:#A7C942;
+  color:#ffffff;
+  }
+
+#customers tr.alt   td 
+  {
+  color:#000000;
+  background-color:#EAF2D3;
+  }
+
+div {
+	font-family: 宋体
+}
+
+div.tree_add {
+	background: url(treeline_2.gif) no-repeat left;
+	padding-left: 24px;
+	padding-top: 3px;
+	color: blue;
+	cursor: hand
+}
+div.tree_1.a {
+text-decoration:none;
+text-decoration:none;
+text-decoration:underline;
+	}
+div.tree_1 {
+
+	color: #000000;
+	background: transparent;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	-moz-user-select: none;
+	padding: 3px 2px;
+	margin: 0;
+	cursor: pointer;
+}
+
+div.tree_2 {
+	padding-left: 100px;
+	background: url(treeline_1.gif) 100px repeat-y;
+	font-size: 14px
+}
+
+div.tree_3 {
+	background: url(treeline_2.gif) no-repeat left;
+	padding-left: 24px;
+	padding-top: 3px
+}

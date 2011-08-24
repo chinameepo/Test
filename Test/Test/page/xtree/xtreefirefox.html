@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>Tree</title>
+<link rel="StyleSheet" href="xtree.css" type="text/css" />
+
+</head>
+<body>
+      
+
+	<div id="container" >
+		<table class="xtree_node" border="0" cellSpacing="0">
+			<tr >
+				<td noWrap="" style="width: 19px; height: 18px">
+					<div class="xtree_minus3"></div></td>
+
+				<td style="width: 16px :     display :     none;">
+					<div></div></td>
+
+				<td noWrap="" style="width: 100%; padding-left: 3px"><span
+					class="standartTreeRow">BUG</span></td>
+			</tr>
+
+			<!-- node3 -->
+			<tr>
+				<td class="xtree_line1"></td>
+
+				<td colSpan="2">
+					<!-- cellspacing 属性规定单元格之间的空间. -->
+					<table class="xtree_node" border="0" cellSpacing="0">
+						<tr>
+							<!-- nowrap 属性规定表格单元格中的内容不换行。-->
+							<td noWrap="" style="width: 19px; height: 18px">
+								<div class="xtree_minus3"></div></td>
+
+							<td style="width: 16px :     display :     none;">
+								<div></div>
+							</td>
+							<!-- padding-left 属性设置元素左内边距（空白）.-->
+							<td noWrap="" style="width: 100%; padding-left: 3px"><span
+								class="standartTreeRow">node3</span></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<script>
+   document.getElementById('container').addEventListener
+				("click",function(e) {
+							if (!e)
+								/* DOM的event代表事件的状态，例如触发event对象的元素、鼠标的位置及状态、按下的键等等。
+								在IE/Opera中，是window.event，而在Firefox中，是event*/
+								e = event;
+							/* 事件的对象，在IE中是window.event.srcElement，在Firefox中是event.target， */
+							var obj = e.target;
+							/*tagName 属性返回被选元素的标签名。
+							语法：
+							elementNode.tagName*/
+							if (obj.tagName == 'DIV') {
+								//className 属性设置或返回元素的 class 属性,classs=""""
+								var cls = obj.className;
+								if (cls == 'xtree_minus3') {
+									//上浮，获取曾祖父节点，childNodes 属性可返回 document 的子节点的 NodeList
+									var ns = obj.parentNode.parentNode.parentNode.parentNode.childNodes;
+									var i = 1;
+									while (i < ns.length) {
+										ns[i].style.display = 'none';
+										i++;
+									}
+									obj.className = 'xtree_plus3';
+								} else if (cls == 'xtree_plus3') {
+									var ns = obj.parentNode.parentNode.parentNode.childNodes;
+									var i = 1;
+									while (i < ns.length) {
+										ns[i].style.display = '';
+										i++;
+									}
+									obj.className = 'xtree_minus3';
+								}
+							}
+						},false);
+	</script>
+
+</body>
+</html>

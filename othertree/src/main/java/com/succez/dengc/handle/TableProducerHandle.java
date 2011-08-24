@@ -1,8 +1,10 @@
 package com.succez.dengc.handle; 
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +34,14 @@ public class TableProducerHandle {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private ApplicationContext aplcxt = new ClassPathXmlApplicationContext(
 			"spring.xml");
-
+    private SQLBean bean;
 	public TableProducerHandle(String database,String table){
 		this.database =database;
 		this.table =table;
 	}
 
 	public String[][] produceContent() {
+		bean= (SQLBean) aplcxt.getBean("sqlBeans");
 		getTableContent();
 		return all;
 	}
@@ -48,14 +51,15 @@ public class TableProducerHandle {
 	 * 获得表的字段名称/内容，然后组装成Ｈｔｍｌ标签。
 	 */
 	public void getTableContent() {
+		Connection connection =null;
+		Statement statement =null;
 		try {
-			SQLBean bean = (SQLBean) aplcxt.getBean("sqlBeans");
-			bean.connect();
-			bean.statement();
+		     connection=bean.connect();
+			 statement=bean.statement(connection);
 			if ((database != null) && (!"".equals(database))) {
-				bean.ecxecute("use  " + database);
+				bean.ecxecute(statement,"use  " + database);
 			}
-			resultSet = bean.query("select * from " + table);
+			resultSet = bean.query(statement,"select * from " + table);
 			ResultSetMetaData metaData = resultSet.getMetaData();
 			clum = metaData.getColumnCount();
 			int row =getRow(resultSet);
@@ -71,9 +75,16 @@ public class TableProducerHandle {
 				}
 				rowCount++;
 			}
-			bean.close();
 		} catch (SQLException e) {
 			logger.error(e.toString());
+		}finally{
+			try {
+				resultSet.close();
+				statement.close();
+				connection.close();
+			} catch (Exception e2) {
+				logger.error(e2.toString());
+			}
 		}
 	}
 	

@@ -19,11 +19,8 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
  *它数据库的连接的操作，只要调用它就可以完成一些基本操作。目前还不打算使用spring注入。
  */
 public class SQLBean {
-	private Connection connection;
-	private Statement statement;
-	private ResultSet resultSet;
 	private Logger logger = LoggerFactory.getLogger(getClass());
-    private ComboPooledDataSource dataSource;
+    private static ComboPooledDataSource dataSource;
 	/**
 	 * 我们只需要指定是在用哪个数据库即可。
 	 * 
@@ -35,78 +32,63 @@ public class SQLBean {
 	/**
 	 * 连接指定的数据库。其实数据库的名字没有，也可以连接成功。
 	 */
-	public void connect() {
+	public Connection connect() {
+		Connection connection =null;
 		try {
 			connection = dataSource.getConnection();
+			logger.info("new conenction:"+connection.toString());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			logger.error("来自方法：SQLBean【connect()】"+e.toString());
-			return;
+			return null;
 		}
+		return connection;
 	}
 
 	/**
 	 * 获取陈述对象，注意这里的两个参数，TYPE_SCROLL_INSENSITIVE,是可以保证来回滚动，而不是一次性滚动
-	 * 之后就不能呢个滚回来了。CONCUR_UPDATABLE，持续更新。
+	 * 之后就不能滚回来了。CONCUR_UPDATABLE，持续更新。
 	 */
-	public void statement() {
+	public Statement statement(Connection connection) {
+		Statement statement =null;
 		try {
+			if(connection==null)
+				return null;
 			statement = connection.createStatement(
 					ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_UPDATABLE);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			logger.error("来自方法：SQLBean【statement()】"+e.toString());
-			return;
+			return null;
 		}
+		return statement;
 	}
 
-	public ResultSet  query(String sql) {
+	public ResultSet  query(Statement statement,String sql) {
+		ResultSet resultSet =null;
 		try {
 			resultSet = statement.executeQuery(sql);
-			return resultSet;
+			//return resultSet;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			logger.error("来自方法：SQLBean【 query(String sql)】"+e.toString());
 			return null;
 		}
+		  return resultSet;
 	}
-	public void  ecxecute(String sql){
+	public boolean ecxecute(Statement statement,String sql){
+		boolean result=true;
 		try {
-			statement.execute(sql);
+			result= statement.execute(sql);
 		} catch (SQLException e) {
 			logger.info("来自方法：SQLBean【ecxecute(String sql】"+e.toString());
 		}
+		return result;
 	}
 
-	public void close() {
-		try {
-			if(resultSet!=null)
-			resultSet.close();
-			if(statement!=null)
-			statement.close();
-			if(connection!=null)
-			connection.close();
-		} catch (Exception e) {
-			logger.error("来自方法：SQLBean【close()】"+e.toString());
-			return;
-		}
-	}
-
-	public void setConnection(Connection connection) {
-		this.connection = connection;
-	}
-
-	public void setStatement(Statement statement) {
-		this.statement = statement;
-	}
-
-	public void setResultSet(ResultSet resultSet) {
-		this.resultSet = resultSet;
-	}
-
-	public void setLogger(Logger logger) {
-		this.logger = logger;
+	public ComboPooledDataSource getDataSource() {
+		return dataSource;
 	}
 
 	public void setDataSource(ComboPooledDataSource dataSource) {

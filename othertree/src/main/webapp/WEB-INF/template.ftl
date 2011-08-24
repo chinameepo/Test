@@ -1,71 +1,7 @@
 <!DOCTYPE script PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<style>
-
-#customers
-  {
-  font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
-  width:100%;
-  border-collapse:collapse;
-  }
-
-#customers td, #customers th 
-  {
-  font-size:1em;
-  border:1px solid #98bf21;
-  padding:3px 7px 2px 7px;
-  }
-
-#customers th 
-  {
-  font-size:1.1em;
-  text-align:left;
-  padding-top:5px;
-  padding-bottom:4px;
-  background-color:#A7C942;
-  color:#ffffff;
-  }
-
-#customers tr.alt   td 
-  {
-  color:#000000;
-  background-color:#EAF2D3;
-  }
-
-div {
-	font-family: 宋体
-}
-
-div.tree_add {
-	background: url(treeline_2.gif) no-repeat left;
-	padding-left: 24px;
-	padding-top: 3px;
-	color: blue;
-	cursor: hand
-}
-
-div.tree_1 {
-	background: url(ico_top1.gif) no-repeat left middle;
-	padding-top: 3px;
-	font-size: 15px;
-	padding- left: 20px;
-	cursor: hand;
-	color: blue
-}
-
-div.tree_2 {
-	padding-left: 100px;
-	background: url(treeline_1.gif) 100px repeat-y;
-	font-size: 14px
-}
-
-div.tree_3 {
-	background: url(treeline_2.gif) no-repeat left;
-	padding-left: 24px;
-	padding-top: 3px
-}
-</style>
+<link rel="StyleSheet" href="css.css" type="text/css" />
 <script language="JavaScript">
 function line(obj)//添加下划线
 {
@@ -93,14 +29,13 @@ eval(eval2);
 </head>
 
 <body>
-  <div>
    <table>
      <tr>
         <td width=80% style="padding: 30px">
         <#if tree??>
          <#list tree as x>
            <div class=tree_1 onmouseover="line(this)"onMouseOut="delline(this)" onClick="showtree('${x.name}')">
-			  <img alt="database" src="img/folder.png">
+			  <img alt="database" src="folder.gif"></img>
 			  <a href="database.do?database=${x.name}">${x.name}
 			  <span id=span_${x.name} style="color: red">+</span>
 		  </div >
@@ -108,7 +43,7 @@ eval(eval2);
              <div id="${x.name}_value" class=tree_2 style="display:none">
 		     <#list x.child as y>
 		            <div class=tree_3 >
-                    <img alt="table" src="/img/page.png">
+                    <img alt="table" src="page.gif"></img>
 					<a href="table.do?database=${x.name}&table=${y}">${y}</a>
 		            </div>
 		     </#list>
@@ -116,10 +51,15 @@ eval(eval2);
 		  </#if>
          </#list>
         </#if>
+        <#--最后添加一个可以执行SQL语句的页面链接-->
+        <div class=tree_1 onmouseover="line(this)"onMouseOut="delline(this)" onClick="showtree('edit')">
+			  <img alt="database" src="sql.png"></img>
+			  <a href="edit.do">SQL编辑器</a>
+		</div >
         </td>
      </tr>
    </table>
-   </div>
+
 
    <div class ="show"  style= "overflow:auto " >
     <#if (tables??)>
@@ -132,17 +72,21 @@ eval(eval2);
                <th>${y}</th>
                </#list>
              </tr>
-           <#elseif (x_index%2==0)>
+           <#elseif (x_index%2==1)>
                <tr >
                <#list x as y>
+               <#if y??>
                <td>${y}</td>
+               </#if>
                </#list>
                </tr>
            <#else>
-           <#--如果行数时奇数，我就是用特殊的背景色才处理-->
+           <#--如果行数时非0的偶数时，我就是用特殊的背景色才处理-->
             <tr class="alt">
               <#list x as y>
+              <#if y??>
                <td>${y}</td>
+              </#if>
               </#list>
               </tr>
            </#if>
@@ -151,6 +95,9 @@ eval(eval2);
     <#else>
     <#--如果为空，什么都不做-->
     </#if>
+    
    </div>
+ 
+
 </body>
 </html>

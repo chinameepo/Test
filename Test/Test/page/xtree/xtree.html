@@ -1,0 +1,219 @@
+<html>
+<head>
+<title>Tree</title>
+<link rel="StyleSheet" href="xtree.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+<table class="xtree_node" border="0" cellSpaceing="0">
+	<tr>
+		<td noWrap="" style="width:19px;height:18px">
+			<div class="xtree_minus3"></div>
+		</td>
+		
+		<td style="width:16px:display:none;">
+			<div></div>
+		</td>
+		
+		<td noWrap="" style="width:100%;padding-left:3px">
+			<span class="standartTreeRow">BUG</span>
+		</td>
+	</tr>
+	
+	<!-- node1 -->
+	<tr>
+		<td class="xtree_line1">
+		</td>
+		
+		<td colSpan="2">
+			<table class="xtree_node" border="0" cellSpacing="0">
+				<tr>
+					<td noWrap="" style="width:19px;height:18px">
+						<div class="xtree_minus3"></div>
+					</td>
+					
+					<td style="width:16px:display:none;">
+						<div></div>
+					</td>
+					
+					<td noWrap="" style="width:100%;padding-left:3px">
+						<span class="standartTreeRow">node1</span>
+					</td>
+				</tr>
+				
+				<!-- children -->
+				<tr>
+					<td class="xtree_line1">
+					</td>
+					
+					<td colSpan="2">
+						<table class="xtree_node" border="0" cellSpaceing="0">
+							<tr>
+								<td noWrap="" style="width:19px;height:18px">
+									<div class="xtree_minus3"></div>
+								</td>
+								
+								<td style="width:16px:display:none;">
+									<div></div>
+								</td>
+								
+								<td noWrap="" style="width:100%;padding-left:3px">
+									<span class="standartTreeRow">node1.1</span>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<!-- node 1.2 -->
+				<tr>
+					<td class="xtree_line1">
+					</td>
+					
+					<td colSpan="2">
+						<table class="xtree_node" border="0" cellSpaceing="0">
+							<tr>
+								<td noWrap="" style="width:19px;height:18px">
+									<div class="xtree_minus3"></div>
+								</td>
+								
+								<td style="width:16px:display:none;">
+									<div></div>
+								</td>
+								
+								<td noWrap="" style="width:100%;padding-left:3px">
+									<span class="standartTreeRow">node1.2</span>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	
+	<!-- node2 -->
+	<tr>
+		<td class="xtree_line1">
+		</td>
+		
+		<td colSpan="2">
+			<table class="xtree_node" border="0" cellSpaceing="0">
+				<tr>
+					<td noWrap="" style="width:19px;height:18px">
+						<div class="xtree_plus3"></div>
+					</td>
+					
+					<td style="width:16px:display:none;">
+						<div></div>
+					</td>
+					
+					<td noWrap="" style="width:100%;padding-left:3px">
+						<span class="standartTreeRow">node2</span>
+					</td>
+				</tr>
+				
+				<!-- children -->
+				<tr style="display:none">
+					<td class="xtree_line1">
+					</td>
+					
+					<td colSpan="2">
+						<table class="xtree_node" border="0" cellSpaceing="0">
+							<tr>
+								<td noWrap="" style="width:19px;height:18px">
+									<div class="xtree_minus3"></div>
+								</td>
+								
+								<td style="width:16px:display:none;">
+									<div></div>
+								</td>
+								
+								<td noWrap="" style="width:100%;padding-left:3px">
+									<span class="standartTreeRow">node2.1</span>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				
+				<tr style="display:none">
+					<td class="xtree_line1">
+					</td>
+					
+					<td colSpan="2">
+						<table class="xtree_node" border="0" cellSpaceing="0">
+							<tr>
+								<td noWrap="" style="width:19px;height:18px">
+									<div class="xtree_minus3"></div>
+								</td>
+								
+								<td style="width:16px:display:none;">
+									<div></div>
+								</td>
+								
+								<td noWrap="" style="width:100%;padding-left:3px">
+									<span class="standartTreeRow">node2.2</span>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	
+	<!-- node3 -->
+	<tr>
+		<td class="xtree_line1">
+		</td>
+		
+		<td colSpan="2">
+			<table class="xtree_node" border="0" cellSpaceing="0">
+				<tr>
+					<td noWrap="" style="width:19px;height:18px">
+						<div class="xtree_minus3"></div>
+					</td>
+					
+					<td style="width:16px:display:none;">
+						<div></div>
+					</td>
+					
+					<td noWrap="" style="width:100%;padding-left:3px">
+						<span class="standartTreeRow">node3</span>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+</div>
+<script>
+	document.getElementById('container').attachEvent("onclick", function(e){
+		if (!e)
+			e = window.event;
+		var obj = e.srcElement;
+		if(obj.tagName=='DIV'){
+			var cls = obj.className;
+			if(cls == 'xtree_minus3'){
+				var ns = obj.parentNode.parentNode.parentNode.childNodes;
+				var i=1;
+				while(i<ns.length){
+					ns[i].style.display = 'none';
+					i++;
+				}
+				obj.className= 'xtree_plus3';
+			}else if(cls == 'xtree_plus3'){
+				var ns = obj.parentNode.parentNode.parentNode.childNodes;
+				var i=1;
+				while(i<ns.length){
+					ns[i].style.display = '';
+					i++;
+				}
+				obj.className= 'xtree_minus3';
+			}
+		}
+	});
+</script>
+</body>
+</html>

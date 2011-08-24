@@ -17,7 +17,7 @@
    </bean>
    
     <!-- C3P0数据连接池的建立 -->
-   <bean id="dataSourceBean" class="com.mchange.v2.c3p0.ComboPooledDataSource"    destroy-method="close">
+   <bean id="dataSourceBean" class="com.mchange.v2.c3p0.ComboPooledDataSource"    destroy-method="close" >
           <property name="driverClass"><value>com.mysql.jdbc.Driver</value></property>
           <property name="jdbcUrl"><value>jdbc:mysql://127.0.0.1:3306/deng</value></property>               
           <property name="user"><value>root</value></property>
